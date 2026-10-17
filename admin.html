@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — AMNE CORDA</title>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/admin.css">
+</head>
+<body>
+  <header class="admin-top">
+    <a class="admin-brand" href="/">AMNE CORDA <span>/ admin</span></a>
+    <div class="admin-top-actions">
+      <a href="/" target="_blank" rel="noopener">查看站点 ↗</a>
+      <button class="btn btn-ghost" id="logout-btn" type="button" hidden>退出</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <section class="login-view" id="login-view">
+      <div class="login-card">
+        <p class="admin-kicker">Admin / 管理后台</p>
+        <h1>登录管理站点</h1>
+        <p class="admin-muted">使用 GitHub Fine-grained Token 登录。Token 只保存在当前标签页，关闭标签页即失效。发布、删除文章会直接提交到仓库，Cloudflare 会自动重新部署。</p>
+
+        <form class="login-form" id="login-form">
+          <div class="field">
+            <label for="token">GitHub Token</label>
+            <input id="token" name="token" type="password" placeholder="github_pat_..." autocomplete="off" spellcheck="false" required>
+          </div>
+          <button class="btn btn-primary" type="submit" id="login-btn">验证并进入</button>
+        </form>
+
+        <p class="status" id="login-error" role="alert"></p>
+
+        <details class="token-help">
+          <summary>如何创建 Token</summary>
+          <ol>
+            <li>打开 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub Fine-grained Token 创建页 ↗</a>。</li>
+            <li>Token name 填 <code>amnecorda-admin</code>，设置一个过期时间（例如 90 天）。</li>
+            <li>Repository access 选择 <strong>Only select repositories</strong>，只勾选 <code>amnecorda</code>。</li>
+            <li>Permissions → Repository permissions → <strong>Contents</strong> 设为 <strong>Read and write</strong>。</li>
+            <li>Generate token，复制生成的 <code>github_pat_...</code>，粘贴到上方输入框。</li>
+          </ol>
+          <p>不要使用包含其他仓库权限的 classic token。Token 泄露时，请立即到 GitHub 设置中撤销。</p>
+        </details>
+      </div>
+    </section>
+
+    <section id="dashboard-view" hidden>
+      <div class="admin-heading">
+        <div>
+          <p class="admin-kicker">Dashboard</p>
+          <h1>站点管理</h1>
+        </div>
+        <p class="repo-line" id="repo-status">mar08meow/amnecorda · main</p>
+      </div>
+
+      <nav class="admin-tabs" aria-label="管理功能">
+        <button type="button" data-tab="posts" class="is-active">文章</button>
+        <button type="button" data-tab="new">写新文章</button>
+        <button type="button" data-tab="files">站点文件</button>
+      </nav>
+
+      <section class="admin-panel" id="panel-posts">
+        <div class="panel-head">
+          <h2>已发布文章</h2>
+          <button class="btn btn-ghost" type="button" id="refresh-posts">刷新</button>
+        </div>
+        <div class="posts-admin-list" id="posts-list"></div>
+        <p class="status" id="posts-status" role="status"></p>
+      </section>
+
+      <section class="admin-panel" id="panel-new" hidden>
+        <div class="panel-head">
+          <h2>写新文章</h2>
+          <span class="repo-line">Markdown → 自动生成文章页</span>
+        </div>
+
+        <form id="post-form">
+          <div class="form-grid">
+            <div class="field full">
+              <label for="post-title">标题</label>
+              <input id="post-title" name="title" type="text" required placeholder="例：为什么你的设计系统，总在第三个月崩塌">
+            </div>
+
+            <div class="field">
+              <label for="post-slug">Slug（URL 文件名）</label>
+              <input id="post-slug" name="slug" type="text" required placeholder="design-systems-collapse">
+              <small>只能包含字母、数字、连字符和中文；发布后不要随意修改。</small>
+            </div>
+
+            <div class="field">
+              <label for="post-date">日期</label>
+              <input id="post-date" name="date" type="date" required>
+            </div>
+
+            <div class="field">
+              <label for="post-category">分类</label>
+              <select id="post-category" name="category">
+                <option value="design">Design / 设计</option>
+                <option value="engineering">Engineering / 工程</option>
+                <option value="notes">Notes / 笔记</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="post-category-label">分类显示名</label>
+              <input id="post-category-label" name="categoryLabel" type="text" value="Design">
+            </div>
+
+            <div class="field">
+              <label for="post-reading">阅读时长</label>
+              <input id="post-reading" name="readingTime" type="text" value="8 min" placeholder="8 min">
+            </div>
+
+            <div class="checkbox-field">
+              <input id="post-featured" name="featured" type="checkbox">
+              <label for="post-featured">放到首页 Selected writing</label>
+            </div>
+
+            <div class="field full">
+              <label for="post-excerpt">摘要 / 导语</label>
+              <textarea id="post-excerpt" name="excerpt" rows="3" required placeholder="一两句话，出现在列表和文章开头。"></textarea>
+            </div>
+
+            <div class="field full">
+              <label for="post-body">正文（Markdown）</label>
+              <textarea id="post-body" name="body" rows="16" required placeholder="## 小标题&#10;&#10;正文段落……&#10;&#10;> 引用&#10;&#10;- 列表项&#10;&#10;```&#10;code block&#10;```"></textarea>
+              <small>支持 ## / ### 标题、段落、引用、无序/有序列表、代码块、粗体、斜体、链接、图片。</small>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit" id="publish-btn">发布文章</button>
+            <button class="btn btn-ghost" type="button" id="preview-btn">预览</button>
+            <span class="repo-line">发布后会创建一个 GitHub commit，Cloudflare 约 1—2 分钟内部署。</span>
+          </div>
+          <p class="status" id="publish-status" role="status"></p>
+        </form>
+
+        <div class="admin-preview" id="preview-panel">
+          <p class="admin-kicker">Preview</p>
+          <div id="preview-content"></div>
+        </div>
+      </section>
+
+      <section class="admin-panel" id="panel-files" hidden>
+        <div class="panel-head">
+          <h2>站点文件</h2>
+          <span class="repo-line">高级操作 · 保存后自动部署</span>
+        </div>
+
+        <div class="file-row">
+          <select id="file-select" aria-label="选择文件">
+            <option value="index.html">index.html</option>
+            <option value="about.html">about.html</option>
+            <option value="projects.html">projects.html</option>
+            <option value="writing.html">writing.html</option>
+            <option value="assets/css/main.css">assets/css/main.css</option>
+            <option value="_headers">_headers</option>
+            <option value="robots.txt">robots.txt</option>
+          </select>
+          <button class="btn btn-ghost" type="button" id="load-file">读取</button>
+          <button class="btn btn-ghost" type="button" id="download-file">下载备份</button>
+        </div>
+
+        <textarea id="file-editor" spellcheck="false" placeholder="选择文件后点击「读取」"></textarea>
+
+        <div class="file-actions">
+          <button class="btn btn-primary" type="button" id="save-file" disabled>保存并部署</button>
+          <span class="repo-line">直接编辑 HTML/CSS 有风险，建议先下载备份。</span>
+        </div>
+        <p class="status" id="file-status" role="status"></p>
+      </section>
+    </section>
+  </main>
+
+  <script src="/assets/js/admin.js"></script>
+</body>
+</html>

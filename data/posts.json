@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "design-systems-collapse",
+    "title": "为什么你的设计系统，总在第三个月崩塌",
+    "category": "design",
+    "categoryLabel": "Design Systems",
+    "date": "2026-09-18",
+    "readingTime": "12 min",
+    "excerpt": "不是组件不够多，而是决策没有留下痕迹。一次关于 token、治理与「谁来拍板」的复盘。",
+    "featured": true
+  },
+  {
+    "slug": "state-as-essay",
+    "title": "把状态管理写成一篇散文",
+    "category": "engineering",
+    "categoryLabel": "Engineering",
+    "date": "2026-08-02",
+    "readingTime": "9 min",
+    "excerpt": "状态不是一堆变量，而是一条叙事线。用「读者会怎么理解」来约束状态设计。",
+    "featured": true
+  },
+  {
+    "slug": "whitespace-attention",
+    "title": "留白是注意力的预算",
+    "category": "design",
+    "categoryLabel": "Design",
+    "date": "2026-06-21",
+    "readingTime": "6 min",
+    "excerpt": "密度不是专业感。界面上的每一寸空白，都在替你决定读者先看哪里。",
+    "featured": true
+  },
+  {
+    "slug": "knowledge-pipeline",
+    "title": "我的个人知识管线：从收藏夹到可用的句子",
+    "category": "notes",
+    "categoryLabel": "Notes",
+    "date": "2025-11-09",
+    "readingTime": "15 min",
+    "excerpt": "工具换了七轮之后，我留下了一条最朴素的流水线：捕获、拆解、重写、交付。",
+    "featured": false
+  }
+]

@@ -1,9 +1,23 @@
-/* MEOW — small, dependency-free enhancements */
+/* AMNE CORDA — small, dependency-free enhancements */
 (() => {
   "use strict";
 
   const root = document.documentElement;
   root.classList.add("js");
+
+  const rootPrefix = location.pathname.includes("/posts/") ? "../" : "";
+
+  const escapeHtml = (value) =>
+    String(value ?? "").replace(/[&<>"']/g, (char) => {
+      const map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      };
+      return map[char];
+    });
 
   /* Current year ---------------------------------------------------------- */
   document.querySelectorAll("[data-year]").forEach((el) => {
@@ -89,32 +103,157 @@
 
   /* Archive filtering ------------------------------------------------------ */
   const filters = Array.from(document.querySelectorAll("[data-filter]"));
-  const rows = Array.from(document.querySelectorAll("[data-category]"));
-  const groups = Array.from(document.querySelectorAll("[data-year-group]"));
 
-  if (filters.length && rows.length) {
+  const applyArchiveFilter = (value) => {
+    const rows = Array.from(document.querySelectorAll("[data-category]"));
+    rows.forEach((row) => {
+      row.hidden = !(value === "all" || row.dataset.category === value);
+    });
+
+    document.querySelectorAll("[data-year-group]").forEach((group) => {
+      const hasVisible = Array.from(
+        group.querySelectorAll("[data-category]")
+      ).some((row) => !row.hidden);
+      group.hidden = !hasVisible;
+    });
+  };
+
+  if (filters.length) {
     filters.forEach((button) => {
       button.addEventListener("click", () => {
-        const value = button.dataset.filter;
-        filters.forEach((b) => {
-          b.classList.toggle("is-active", b === button);
-          b.setAttribute("aria-pressed", String(b === button));
+        filters.forEach((item) => {
+          item.classList.toggle("is-active", item === button);
+          item.setAttribute("aria-pressed", String(item === button));
         });
-
-        rows.forEach((row) => {
-          const show = value === "all" || row.dataset.category === value;
-          row.hidden = !show;
-        });
-
-        groups.forEach((group) => {
-          const hasVisible = Array.from(
-            group.querySelectorAll("[data-category]")
-          ).some((row) => !row.hidden);
-          group.hidden = !hasVisible;
-        });
+        applyArchiveFilter(button.dataset.filter);
       });
     });
   }
+
+  /* Posts data ------------------------------------------------------------- */
+  const renderFeatured = (posts) => {
+    const list = document.querySelector("[data-featured-list]");
+    if (!list) return;
+
+    const featured = posts.filter((post) => post.featured).slice(0, 3);
+    const items = featured.length ? featured : posts.slice(0, 3);
+    if (!items.length) return;
+
+    list.innerHTML = items
+      .map(
+        (post) => `<li>
+          <a href="posts/${encodeURIComponent(post.slug)}.html">${escapeHtml(post.title)}</a>
+          <span class="mini-meta">${escapeHtml(
+            post.categoryLabel || post.category
+          )} · ${escapeHtml(String(post.date || "").slice(0, 4))}</span>
+        </li>`
+      )
+      .join("");
+  };
+
+  const renderArchive = (posts) => {
+    const container = document.querySelector("[data-archive-root]");
+    if (!container) return;
+
+    const groups = new Map();
+    posts.forEach((post) => {
+      const year = String(post.date || "").slice(0, 4) || "—";
+      if (!groups.has(year)) groups.set(year, []);
+      groups.get(year).push(post);
+    });
+
+    let index = 0;
+    container.innerHTML = Array.from(groups.entries())
+      .map(
+        ([year, items]) => `<div class="archive-group" data-year-group>
+          <h2 class="year-label">${escapeHtml(year)}</h2>
+          ${items
+            .map((post) => {
+              index += 1;
+              const shortDate = String(post.date || "")
+                .slice(5)
+                .replace("-", ".");
+              return `<a class="archive-row" href="posts/${encodeURIComponent(
+                post.slug
+              )}.html" data-category="${escapeHtml(post.category)}">
+                <span class="archive-no">${String(index).padStart(2, "0")}</span>
+                <span class="archive-title">${escapeHtml(post.title)}</span>
+                <span class="archive-cat">${escapeHtml(
+                  post.categoryLabel || post.category
+                )}</span>
+                <span class="archive-date">${escapeHtml(shortDate)}</span>
+                <span class="archive-arrow" aria-hidden="true">↗</span>
+              </a>`;
+            })
+            .join("")}
+        </div>`
+      )
+      .join("");
+  };
+
+  const updateNextPost = (posts) => {
+    const link = document.querySelector(".next-post");
+    if (!link) return;
+
+    const slug =
+      document.body.dataset.slug ||
+      location.pathname.split("/").pop().replace(/\.html$/, "");
+    const index = posts.findIndex((post) => post.slug === slug);
+    if (index < 0) return;
+
+    const next = posts[index + 1] || (posts.length > 1 ? posts[0] : null);
+    if (!next) {
+      link.hidden = true;
+      return;
+    }
+
+    link.href = `${rootPrefix}posts/${encodeURIComponent(next.slug)}.html`;
+    const title = link.querySelector(".next-title");
+    if (title) {
+      title.innerHTML = `${escapeHtml(
+        next.title
+      )} <span class="next-arrow" aria-hidden="true">↗</span>`;
+    }
+  };
+
+  const loadPosts = async () => {
+    try {
+      const response = await fetch(`${rootPrefix}data/posts.json`, {
+        cache: "no-store",
+      });
+      if (!response.ok) return null;
+      const data = await response.json();
+      return Array.isArray(data) ? data : null;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  loadPosts().then((posts) => {
+    if (!posts) return;
+    renderFeatured(posts);
+    renderArchive(posts);
+    updateNextPost(posts);
+
+    const count = document.querySelector("[data-post-count]");
+    if (count) {
+      const years = posts
+        .map((post) => String(post.date || "").slice(0, 4))
+        .filter(Boolean)
+        .sort();
+      const range = years.length
+        ? years[0] === years[years.length - 1]
+          ? years[0]
+          : `${years[0]}—${years[years.length - 1]}`
+        : "";
+      count.textContent = `${String(posts.length).padStart(2, "0")} ENTRIES${
+        range ? " / " + range : ""
+      }`;
+    }
+
+    const activeFilter = document.querySelector(".filter.is-active");
+    applyArchiveFilter(activeFilter?.dataset.filter || "all");
+  });
 
   /* Reading progress ------------------------------------------------------- */
   const bar = document.querySelector("[data-progress]");

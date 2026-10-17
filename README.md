@@ -15,34 +15,70 @@
 - **Projects `projects.html`**：作品列表，4 个示例项目与技术标签。
 - **About `about.html`**：更完整的自述、时间线、Now 与联系方式。
 - **文章 `posts/*.html`**：4 篇示例长文，含目录、阅读进度、代码块与上下篇导航。
+- **管理后台 `admin.html`**：`/admin` 登录后管理文章与站点文件。
 - **404 `404.html`**：自定义错误页。
 
 ## 预览
 
 不需要安装依赖，直接双击 `index.html` 即可。也可以用任意静态服务器打开此目录。
 
+## 管理后台
+
+- 地址：`https://amnecorda.com/admin`（`_redirects` 将 `/admin` 映射到 `admin.html`）
+- 功能：查看文章、发布文章、删除文章、编辑站点 HTML/CSS 文件
+- 认证：GitHub Fine-grained Token，只保存在当前标签页的 sessionStorage
+- 发布/删除会创建一次 GitHub commit，Cloudflare 会自动部署
+
+### 创建 Token
+
+1. 打开 [GitHub Fine-grained Token 创建页](https://github.com/settings/personal-access-tokens/new)。
+2. Token name 填 `amnecorda-admin`，设置一个过期时间。
+3. Repository access 选择 **Only select repositories**，只勾选 `amnecorda`。
+4. Permissions → Repository permissions → **Contents** 设为 **Read and write**。
+5. Generate token，复制 `github_pat_...`，粘贴到 `/admin` 的登录框。
+
+> 不要使用包含其他仓库权限的 classic token。Token 泄露时请立即到 GitHub 设置中撤销。
+
+### 发布与删除
+
+在“写新文章”中填写标题、slug、日期、分类、摘要和 Markdown 正文，可以先预览。发布会生成 `posts/<slug>.html`，同时更新 `data/posts.json` 与 `sitemap.xml`。
+
+在“文章”列表点删除，会删除文章文件并同步文章列表与 sitemap；其他文章的 “Next entry” 会由前台脚本按最新列表重新计算。
+
+### 站点文件
+
+“站点文件”可以直接编辑 `index.html`、`about.html`、`projects.html`、`writing.html`、`assets/css/main.css` 等文件。保存前建议先下载备份；直接改 HTML/CSS 有风险。
+
+> `/admin` 页面本身是公开的，但没有 Token 无法执行任何写操作。如需更强保护，可以在 Cloudflare 给 `/admin*` 添加 Access 策略。
+
 ## 文件结构
 
 ```
 personal-blog/
 ├─ index.html                 个人主页
-├─ writing.html               文章存档（带分类筛选）
+├─ writing.html               文章存档（动态读取 posts.json）
 ├─ projects.html              项目 / 作品
 ├─ about.html                 关于页
+├─ admin.html                 管理后台
 ├─ 404.html                   404 页面
+├─ data/
+│  └─ posts.json              文章索引（后台发布/删除时更新）
 ├─ posts/
 │  ├─ design-systems-collapse.html
 │  ├─ state-as-essay.html
 │  ├─ whitespace-attention.html
 │  └─ knowledge-pipeline.html
 ├─ assets/
-│  ├─ css/main.css            全部样式（设计变量在 :root）
-│  ├─ js/main.js              菜单、筛选、进度、目录高亮、复制邮箱
+│  ├─ css/main.css            站点样式（设计变量在 :root）
+│  ├─ css/admin.css           管理后台样式
+│  ├─ js/main.js              菜单、动态列表、筛选、进度、目录高亮
+│  ├─ js/admin.js             登录、发布/删除文章、GitHub commit、文件编辑
 │  ├─ img/portrait.svg        黑白排版式肖像
 │  └─ favicon.svg             黑白 A 字标
 ├─ robots.txt
 ├─ sitemap.xml
 ├─ _headers                   Cloudflare Pages 安全响应头
+├─ _redirects                 /admin → /admin.html
 └─ README.md
 ```
 
@@ -68,16 +104,17 @@ personal-blog/
 5. **文章内容**：四篇文章为示例长文，可直接替换。
 6. **品牌**：`AMNE CORDA` 出现在每个页面的字标、页脚大字、`<title>` 与 meta 中，可全局搜索替换。
 7. **邮箱**：`hello@amnecorda.com` 出现在页头、页脚、关于页与 404 页。
-8. **日期与 sitemap**：发布新文章或新项目后更新 `sitemap.xml` 的 `lastmod`。
+8. **日期与 sitemap**：通过 `/admin` 发布/删除会自动更新 `sitemap.xml`；手动新增文章时再更新。
 
-## 新增一篇文章
+## 新增一篇文章（手动方式）
 
-1. 复制 `posts/design-systems-collapse.html`，重命名为 `posts/your-slug.html`。
-2. 修改 `<title>`、`.article-meta`、`.article-title`、`.article-deck`、正文与文末上下篇链接。
-3. 正文里的每个 `<h2 id="s1">` 要与右侧 `.toc` 的 `href="#s1"` 一一对应。
-4. 在 `writing.html` 添加一条 `.archive-row`（`data-category` 取 `engineering` / `design` / `notes`）。
-5. 如果希望它出现在首页 `Selected writing`，在 `index.html` 的 `.mini-list` 中加一条 `<li>`。
-6. 更新上一篇的 `.next-post` 链接，并在 `sitemap.xml` 增加对应 URL。
+推荐直接使用 `/admin` 发布；以下仅用于手动维护。
+
+1. 复制 `posts/design-systems-collapse.html`，重命名为 `posts/your-slug.html`，修改标题、meta、正文与目录。
+2. 在 `data/posts.json` 增加一条记录：`slug`、`title`、`category`（`engineering` / `design` / `notes`）、`categoryLabel`、`date`（YYYY-MM-DD）、`readingTime`、`excerpt`、`featured`。
+3. 在 `sitemap.xml` 增加 `https://amnecorda.com/posts/your-slug.html`。
+4. 首页精选和归档列表会自动从 `data/posts.json` 渲染，不需要再改 `writing.html` 或 `index.html`。
+5. 文章页的 “Next entry” 会根据最新列表自动更新。
 
 ## 新增一个项目
 
