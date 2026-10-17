@@ -32,6 +32,9 @@
     reading: "inter",
     base: 16,
     readingSize: 16.5,
+    displayWeight: 700,
+    headingWeight: 600,
+    bodyWeight: 400,
   };
   const THEME_PRESETS = {
     mono: { ...THEME_DEFAULTS },
@@ -212,6 +215,15 @@
       "--reading": FONT_STACKS[theme.reading] || FONT_STACKS.inter,
       "--base-size": `${Number(theme.base) || THEME_DEFAULTS.base}px`,
       "--reading-size": `${Number(theme.readingSize) || THEME_DEFAULTS.readingSize}px`,
+      "--display-weight": String(
+        Number(theme.displayWeight) || THEME_DEFAULTS.displayWeight
+      ),
+      "--heading-weight": String(
+        Number(theme.headingWeight) || THEME_DEFAULTS.headingWeight
+      ),
+      "--body-weight": String(
+        Number(theme.bodyWeight) || THEME_DEFAULTS.bodyWeight
+      ),
     };
   };
 
@@ -255,6 +267,11 @@
       reading: fontKey(read("reading"), THEME_DEFAULTS.reading),
       base: parseFloat(read("base-size")) || THEME_DEFAULTS.base,
       readingSize: parseFloat(read("reading-size")) || THEME_DEFAULTS.readingSize,
+      displayWeight:
+        parseFloat(read("display-weight")) || THEME_DEFAULTS.displayWeight,
+      headingWeight:
+        parseFloat(read("heading-weight")) || THEME_DEFAULTS.headingWeight,
+      bodyWeight: parseFloat(read("body-weight")) || THEME_DEFAULTS.bodyWeight,
     };
   };
 
@@ -267,6 +284,9 @@
     reading: $("#theme-reading").value,
     base: Number($("#theme-base").value),
     readingSize: Number($("#theme-reading-size").value),
+    displayWeight: Number($("#theme-display-weight").value),
+    headingWeight: Number($("#theme-heading-weight").value),
+    bodyWeight: Number($("#theme-body-weight").value),
   });
 
   const applyThemePreview = () => {
@@ -284,6 +304,9 @@
       "--pv-display": vars["--display"],
       "--pv-reading": vars["--reading"],
       "--pv-reading-size": vars["--reading-size"],
+      "--pv-display-weight": vars["--display-weight"],
+      "--pv-heading-weight": vars["--heading-weight"],
+      "--pv-body-weight": vars["--body-weight"],
     };
     Object.entries(map).forEach(([key, value]) =>
       preview.style.setProperty(key, value)
@@ -306,6 +329,12 @@
     $("#theme-reading-size").value = String(state.theme.readingSize);
     $("#theme-base-value").textContent = `${state.theme.base}px`;
     $("#theme-reading-value").textContent = `${state.theme.readingSize}px`;
+    $("#theme-display-weight").value = String(state.theme.displayWeight);
+    $("#theme-heading-weight").value = String(state.theme.headingWeight);
+    $("#theme-body-weight").value = String(state.theme.bodyWeight);
+    $("#theme-display-weight-value").textContent = String(state.theme.displayWeight);
+    $("#theme-heading-weight-value").textContent = String(state.theme.headingWeight);
+    $("#theme-body-weight-value").textContent = String(state.theme.bodyWeight);
     applyThemePreview();
   };
 
@@ -317,6 +346,9 @@
     });
     $("#theme-base-value").textContent = `${state.theme.base}px`;
     $("#theme-reading-value").textContent = `${state.theme.readingSize}px`;
+    $("#theme-display-weight-value").textContent = String(state.theme.displayWeight);
+    $("#theme-heading-weight-value").textContent = String(state.theme.headingWeight);
+    $("#theme-body-weight-value").textContent = String(state.theme.bodyWeight);
     applyThemePreview();
   };
 
@@ -1103,7 +1135,7 @@ ${urls
   ["sans", "display", "reading"].forEach((key) => {
     $("#theme-" + key)?.addEventListener("change", updateTheme);
   });
-  ["theme-base", "theme-reading-size"].forEach((id) => {
+  ["theme-base", "theme-reading-size", "theme-display-weight", "theme-heading-weight", "theme-body-weight"].forEach((id) => {
     $("#" + id)?.addEventListener("input", updateTheme);
   });
   $$(".theme-preset").forEach((button) => {

@@ -749,6 +749,9 @@ textarea {
   --pv-display: var(--sans);
   --pv-reading: var(--sans);
   --pv-reading-size: 16.5px;
+  --pv-display-weight: 700;
+  --pv-heading-weight: 600;
+  --pv-body-weight: 400;
   position: sticky;
   top: 86px;
   display: grid;
@@ -770,7 +773,7 @@ textarea {
   border-right: 1px solid var(--pv-line);
   font-family: var(--pv-display);
   font-size: 15px;
-  font-weight: 600;
+  font-weight: var(--pv-heading-weight, 600);
   line-height: 1.12;
   letter-spacing: 0.02em;
 }
@@ -801,7 +804,7 @@ textarea {
   margin: 0;
   font-family: var(--pv-display);
   font-size: clamp(1.7rem, 3vw, 2.5rem);
-  font-weight: 500;
+  font-weight: var(--pv-display-weight, 700);
   line-height: 1.15;
   letter-spacing: -0.02em;
 }
@@ -810,6 +813,7 @@ textarea {
   margin: 18px 0 0;
   font-family: var(--pv-reading);
   font-size: var(--pv-reading-size);
+  font-weight: var(--pv-body-weight, 400);
   line-height: 1.8;
   color: var(--pv-soft);
 }

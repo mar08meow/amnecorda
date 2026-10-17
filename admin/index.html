@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/admin.css?v=theme1">
+  <link rel="stylesheet" href="/assets/css/admin.css?v=weight1">
 </head>
 <body>
   <header class="admin-top">
@@ -236,6 +236,22 @@
             </div>
 
             <div class="theme-group">
+              <h3>字重</h3>
+              <div class="theme-field">
+                <label for="theme-display-weight">大标题字重 <output id="theme-display-weight-value">700</output></label>
+                <input id="theme-display-weight" type="range" min="500" max="800" step="50" value="700">
+              </div>
+              <div class="theme-field">
+                <label for="theme-heading-weight">小标题字重 <output id="theme-heading-weight-value">600</output></label>
+                <input id="theme-heading-weight" type="range" min="400" max="700" step="50" value="600">
+              </div>
+              <div class="theme-field">
+                <label for="theme-body-weight">正文字重 <output id="theme-body-weight-value">400</output></label>
+                <input id="theme-body-weight" type="range" min="300" max="500" step="50" value="400">
+              </div>
+            </div>
+
+            <div class="theme-group">
               <h3>预设</h3>
               <div class="theme-presets">
                 <button type="button" class="theme-preset" data-preset="mono">黑白极简</button>
@@ -269,6 +285,6 @@
     </section>
   </main>
 
-  <script src="/assets/js/admin.js?v=theme1"></script>
+  <script src="/assets/js/admin.js?v=weight1"></script>
 </body>
 </html>

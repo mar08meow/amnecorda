@@ -25,6 +25,9 @@
 
   --base-size: 16px;
   --reading-size: 16.5px;
+  --display-weight: 700;
+  --heading-weight: 600;
+  --body-weight: 400;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --gutter: clamp(22px, 4vw, 56px);
@@ -2139,6 +2142,29 @@ a:hover .arrow {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
+}
+
+/* --- Weight controls ------------------------------------------------------ */
+
+.hero-title,
+.page-title,
+.article-title {
+  font-weight: var(--display-weight);
+}
+
+.post-title,
+.section-title,
+.about-copy h2,
+.subscribe h2,
+.next-title,
+.prose h2,
+.prose h3 {
+  font-weight: var(--heading-weight);
+}
+
+body,
+.prose {
+  font-weight: var(--body-weight);
 }
 
 /* --- Reveal & motion ------------------------------------------------------ */
