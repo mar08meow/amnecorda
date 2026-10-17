@@ -1,15 +1,5 @@
 [
   {
-    "slug": "admin-smoke-test",
-    "title": "后台发布链路测试",
-    "category": "design",
-    "categoryLabel": "Test",
-    "date": "2026-10-17",
-    "readingTime": "1 min",
-    "excerpt": "这是一篇用于验证后台发布与删除链路的临时文章。",
-    "featured": false
-  },
-  {
     "slug": "design-systems-collapse",
     "title": "为什么你的设计系统，总在第三个月崩塌",
     "category": "design",
