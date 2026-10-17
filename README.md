@@ -15,7 +15,7 @@
 - **Projects `projects.html`**：作品列表，4 个示例项目与技术标签。
 - **About `about.html`**：更完整的自述、时间线、Now 与联系方式。
 - **文章 `posts/*.html`**：4 篇示例长文，含目录、阅读进度、代码块与上下篇导航。
-- **管理后台 `admin.html`**：`/admin` 登录后管理文章与站点文件。
+- **管理后台 `admin/index.html`**：`/admin` 登录后管理文章与站点文件。
 - **404 `404.html`**：自定义错误页。
 
 ## 预览
@@ -24,7 +24,7 @@
 
 ## 管理后台
 
-- 地址：`https://amnecorda.com/admin`（`_redirects` 将 `/admin` 映射到 `admin.html`）
+- 地址：`https://amnecorda.com/admin`（由 `admin/index.html` 提供）
 - 功能：查看文章、发布文章、删除文章、编辑站点 HTML/CSS 文件
 - 认证：GitHub Fine-grained Token，只保存在当前标签页的 sessionStorage
 - 发布/删除会创建一次 GitHub commit，Cloudflare 会自动部署
@@ -59,7 +59,7 @@ personal-blog/
 ├─ writing.html               文章存档（动态读取 posts.json）
 ├─ projects.html              项目 / 作品
 ├─ about.html                 关于页
-├─ admin.html                 管理后台
+├─ admin/index.html           管理后台
 ├─ 404.html                   404 页面
 ├─ data/
 │  └─ posts.json              文章索引（后台发布/删除时更新）
@@ -78,7 +78,6 @@ personal-blog/
 ├─ robots.txt
 ├─ sitemap.xml
 ├─ _headers                   Cloudflare Pages 安全响应头
-├─ _redirects                 /admin → /admin.html
 └─ README.md
 ```
 
