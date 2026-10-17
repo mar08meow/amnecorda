@@ -45,6 +45,7 @@
 
       <nav class="admin-tabs" aria-label="管理功能">
         <button type="button" data-tab="files" class="is-active">站点文件</button>
+        <button type="button" data-tab="content">内容</button>
         <button type="button" data-tab="appearance">外观</button>
       </nav>
 
@@ -159,6 +160,89 @@
           <span class="repo-line">直接编辑 HTML/CSS 有风险，建议先下载备份。</span>
         </div>
         <p class="status" id="file-status" role="status"></p>
+      </section>
+
+      <section class="admin-panel" id="panel-content" hidden>
+        <div class="panel-head">
+          <h2>页面内容</h2>
+          <span class="repo-line">文字与链接 · 保存后自动部署</span>
+        </div>
+        <p class="repo-line">项目下载按钮会自动跟随 GitHub 最新 Release；这里修改名称和描述。新增项目请使用「站点文件」。</p>
+
+        <form id="content-form">
+          <div class="form-grid">
+            <div class="field full">
+              <label for="content-page-title">页面标题</label>
+              <input id="content-page-title" type="text" required>
+            </div>
+            <div class="field full">
+              <label for="content-page-description">页面描述（SEO）</label>
+              <textarea id="content-page-description" rows="2"></textarea>
+            </div>
+
+            <div class="field">
+              <label for="content-name">名字</label>
+              <input id="content-name" type="text" required>
+            </div>
+            <div class="field">
+              <label for="content-role">一句话介绍</label>
+              <input id="content-role" type="text">
+            </div>
+            <div class="field full">
+              <label for="content-intro">首页介绍</label>
+              <textarea id="content-intro" rows="3"></textarea>
+            </div>
+
+            <div class="field full">
+              <label for="content-about-1">About me 第一段</label>
+              <textarea id="content-about-1" rows="3"></textarea>
+            </div>
+            <div class="field full">
+              <label for="content-about-2">About me 第二段</label>
+              <textarea id="content-about-2" rows="3"></textarea>
+            </div>
+
+            <div class="field full">
+              <label for="content-contact-note">联系区介绍</label>
+              <textarea id="content-contact-note" rows="2"></textarea>
+            </div>
+            <div class="field">
+              <label for="content-github">GitHub 链接</label>
+              <input id="content-github" type="url">
+            </div>
+            <div class="field">
+              <label for="content-x">X 链接</label>
+              <input id="content-x" type="url">
+            </div>
+            <div class="field">
+              <label for="content-email">邮箱</label>
+              <input id="content-email" type="email">
+            </div>
+
+            <div class="field">
+              <label for="content-appantry-title">项目一名称</label>
+              <input id="content-appantry-title" type="text">
+            </div>
+            <div class="field full">
+              <label for="content-appantry-desc">AppPantry 描述</label>
+              <textarea id="content-appantry-desc" rows="3"></textarea>
+            </div>
+            <div class="field">
+              <label for="content-lsp-title">项目二名称</label>
+              <input id="content-lsp-title" type="text">
+            </div>
+            <div class="field full">
+              <label for="content-lsp-desc">HyperOS 描述</label>
+              <textarea id="content-lsp-desc" rows="3"></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit" id="save-content">保存内容</button>
+            <span class="repo-line">保存会创建 GitHub commit，Cloudflare 自动部署。</span>
+          </div>
+          <p class="status" id="content-status" role="status"></p>
+        </form>
       </section>
 
       <section class="admin-panel" id="panel-appearance" hidden>
@@ -282,6 +366,6 @@
     </section>
   </main>
 
-  <script src="/assets/js/admin.js?v=simple2"></script>
+  <script src="/assets/js/admin.js?v=content1"></script>
 </body>
 </html>

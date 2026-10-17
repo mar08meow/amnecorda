@@ -14,7 +14,7 @@
   - Things I made：AppPantry、HyperOS Workbench Blur Fix
   - Find me at：GitHub、X、Email
 - **`404.html`**：精简错误页
-- **`admin/index.html`**：受 Cloudflare Access 保护的后台，只保留「站点文件」与「外观」
+- **`admin/index.html`**：受 Cloudflare Access 保护的后台，包含「站点文件」「内容」「外观」
 
 ## 文件结构
 
@@ -50,6 +50,18 @@ GitHub 仓库 `mar08meow/amnecorda` 已连接 Cloudflare Pages，`main` 分支�
 - 或登录 `https://amnecorda.com/admin/`，用「站点文件」编辑 `index.html`、`404.html`、CSS 等
 
 后台登录使用 Cloudflare Access，只允许 `wen18792247083@gmail.com`。GitHub 私钥保存在 Cloudflare Pages 的加密环境变量里，浏览器不接触 Token。
+
+## 后台内容编辑
+
+登录 `/admin/` 后打开 **内容**，可以直接修改：
+
+- 页面标题、SEO 描述
+- 首页名字、一句话介绍、介绍段落
+- About me 两段文字
+- 联系区文字、GitHub / X / Email 链接
+- AppPantry 与 HyperOS 两个项目的名称和描述
+
+保存后会重写 `index.html`、创建 GitHub commit，并自动触发 Cloudflare 部署。新增项目或修改更复杂的结构，请使用「站点文件」。
 
 ## 外观
 

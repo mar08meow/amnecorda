@@ -77,6 +77,8 @@
     fileContent: "",
     theme: null,
     themeLoaded: false,
+    contentDoc: null,
+    contentLoaded: false,
     busy: false,
   };
 
@@ -369,6 +371,198 @@
       setStatus(status, "读取外观失败：" + error.message, "error");
     }
   };
+
+  /* --- Content editor ----------------------------------------------------- */
+
+  const CONTENT_PAGE = "index.html";
+
+  const getFieldValue = (id) => {
+    const field = $("#" + id);
+    return field ? field.value.trim() : "";
+  };
+
+  const setFieldValue = (id, value) => {
+    const field = $("#" + id);
+    if (field) field.value = value ?? "";
+  };
+
+  const textOf = (doc, selector) => {
+    const node = doc.querySelector(selector);
+    return node ? node.textContent.trim() : "";
+  };
+
+  const setText = (doc, selector, value) => {
+    const node = doc.querySelector(selector);
+    if (node) node.textContent = value;
+  };
+
+  const loadContent = async () => {
+    if (state.contentLoaded && state.contentDoc) return;
+    const status = $("#content-status");
+    setStatus(status, "正在读取页面内容…");
+
+    try {
+      const file = await getFile(CONTENT_PAGE);
+      if (!file.content) throw new Error("index.html 是空的");
+      const doc = new DOMParser().parseFromString(file.content, "text/html");
+      state.contentDoc = doc;
+      state.contentLoaded = true;
+
+      const about = doc.querySelectorAll("#about .profile-grid > div p");
+      const contactLinks = doc.querySelectorAll("#contact .link-row a");
+      const findHref = (prefix) =>
+        Array.from(contactLinks)
+          .find((link) =>
+            (link.getAttribute("href") || "").startsWith(prefix)
+          )
+          ?.getAttribute("href") || "";
+
+      setFieldValue("content-page-title", doc.title || "");
+      setFieldValue(
+        "content-page-description",
+        doc.querySelector('meta[name="description"]')?.getAttribute("content") ||
+          ""
+      );
+      setFieldValue(
+        "content-name",
+        doc.querySelector(".hero-line--2 em")?.textContent || ""
+      );
+      setFieldValue("content-role", textOf(doc, ".hero-role"));
+      setFieldValue("content-intro", textOf(doc, ".hero-intro"));
+      setFieldValue("content-about-1", about[0]?.textContent.trim() || "");
+      setFieldValue("content-about-2", about[1]?.textContent.trim() || "");
+      setFieldValue(
+        "content-contact-note",
+        textOf(doc, "#contact .profile-note")
+      );
+      setFieldValue("content-github", findHref("https://github.com"));
+      setFieldValue("content-x", findHref("https://x.com"));
+      setFieldValue(
+        "content-email",
+        findHref("mailto:").replace(/^mailto:/, "")
+      );
+      setFieldValue(
+        "content-appantry-title",
+        textOf(doc, "#appantry .project-title")
+      );
+      setFieldValue(
+        "content-appantry-desc",
+        textOf(doc, "#appantry .project-desc")
+      );
+      setFieldValue(
+        "content-lsp-title",
+        textOf(doc, "#hyperos-blur-fix .project-title")
+      );
+      setFieldValue(
+        "content-lsp-desc",
+        textOf(doc, "#hyperos-blur-fix .project-desc")
+      );
+
+      setStatus(status, "已读取当前页面内容。");
+    } catch (error) {
+      setStatus(status, "读取失败：" + error.message, "error");
+    }
+  };
+
+  const updateProfileLinks = (doc, prefix, value) => {
+    if (!value) return;
+    doc
+      .querySelectorAll(
+        '#contact .link-row a, .footer-nav[aria-label="社交链接"] a, .hero-actions a'
+      )
+      .forEach((link) => {
+        if ((link.getAttribute("href") || "").startsWith(prefix)) {
+          link.setAttribute("href", value);
+        }
+      });
+  };
+
+  const saveContent = async (event) => {
+    event.preventDefault();
+    if (!state.contentDoc) {
+      await loadContent();
+      if (!state.contentDoc) return;
+    }
+
+    const status = $("#content-status");
+    const button = $("#save-content");
+    const name = getFieldValue("content-name");
+    const pageTitle = getFieldValue("content-page-title");
+
+    if (!name || !pageTitle) {
+      setStatus(status, "名字和页面标题不能为空。", "error");
+      return;
+    }
+
+    const doc = state.contentDoc;
+    const description = getFieldValue("content-page-description");
+    const intro = getFieldValue("content-intro");
+    const about1 = getFieldValue("content-about-1");
+    const about2 = getFieldValue("content-about-2");
+    const contactNote = getFieldValue("content-contact-note");
+    const github = getFieldValue("content-github");
+    const x = getFieldValue("content-x");
+    const email = getFieldValue("content-email").replace(/^mailto:/, "");
+
+    doc.title = pageTitle;
+    const meta = doc.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", description);
+    const ogTitle = doc.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute("content", pageTitle);
+    const ogDescription = doc.querySelector('meta[property="og:description"]');
+    if (ogDescription) ogDescription.setAttribute("content", description);
+
+    setText(doc, ".hero-line--2 em", name);
+    setText(doc, ".hero-role", getFieldValue("content-role"));
+    setText(doc, ".hero-intro", intro);
+
+    const about = doc.querySelectorAll("#about .profile-grid > div p");
+    if (about[0]) about[0].textContent = about1;
+    if (about[1]) about[1].textContent = about2;
+
+    setText(doc, "#contact .profile-note", contactNote);
+    updateProfileLinks(doc, "https://github.com", github);
+    updateProfileLinks(doc, "https://x.com", x);
+    if (email) {
+      doc.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
+        link.setAttribute("href", `mailto:${email}`);
+      });
+    }
+
+    const appTitle = getFieldValue("content-appantry-title");
+    const appDesc = getFieldValue("content-appantry-desc");
+    const lspTitle = getFieldValue("content-lsp-title");
+    const lspDesc = getFieldValue("content-lsp-desc");
+    if (appTitle) setText(doc, "#appantry .project-title", appTitle);
+    if (appDesc) setText(doc, "#appantry .project-desc", appDesc);
+    if (lspTitle) setText(doc, "#hyperos-blur-fix .project-title", lspTitle);
+    if (lspDesc) setText(doc, "#hyperos-blur-fix .project-desc", lspDesc);
+
+    button.disabled = true;
+    setStatus(status, "正在提交页面内容…");
+
+    try {
+      const html = `<!DOCTYPE html>\n${doc.documentElement.outerHTML}\n`;
+      const commit = await commitFiles(
+        [{ path: CONTENT_PAGE, content: html }],
+        "Update page content"
+      );
+      state.contentDoc = doc;
+      state.contentLoaded = true;
+      setStatus(
+        status,
+        "页面内容已保存，Cloudflare 自动部署。",
+        "success",
+        commit.html_url
+      );
+    } catch (error) {
+      setStatus(status, "保存失败：" + error.message, "error");
+    } finally {
+      button.disabled = false;
+    }
+  };
+
+  $("#content-form")?.addEventListener("submit", saveContent);
 
   /* --- Markdown ---------------------------------------------------------- */
 
@@ -827,9 +1021,13 @@ ${items}
     $("#panel-posts").hidden = name !== "posts";
     $("#panel-new").hidden = name !== "new";
     $("#panel-files").hidden = name !== "files";
+    $("#panel-content").hidden = name !== "content";
     $("#panel-appearance").hidden = name !== "appearance";
     if (name === "files" && !state.fileContent) {
       loadSelectedFile();
+    }
+    if (name === "content") {
+      loadContent();
     }
     if (name === "appearance") {
       loadTheme();
