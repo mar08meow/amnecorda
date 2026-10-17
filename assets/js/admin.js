@@ -1,13 +1,11 @@
 /* AMNE CORDA — admin console
-   Static page + GitHub Fine-grained Token.
-   Token is kept in sessionStorage only. */
+   Cloudflare Access + server-side GitHub token. */
 (() => {
   "use strict";
 
   const OWNER = "mar08meow";
   const REPO = "amnecorda";
   const BRANCH = "main";
-  const TOKEN_KEY = "amnecorda_admin_token";
   const CATEGORY_DEFAULTS = {
     design: "Design",
     engineering: "Engineering",
@@ -15,7 +13,7 @@
   };
 
   const state = {
-    token: "",
+    user: null,
     posts: [],
     filePath: "",
     fileContent: "",
@@ -55,25 +53,23 @@
     }
   };
 
-  /* --- GitHub API -------------------------------------------------------- */
+  /* --- Admin API --------------------------------------------------------- */
 
   const api = async (path, options = {}) => {
-    const response = await fetch(`https://api.github.com${path}`, {
+    const response = await fetch(path, {
+      credentials: "same-origin",
       ...options,
       headers: {
-        Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${state.token}`,
-        "X-GitHub-Api-Version": "2022-11-28",
         ...(options.body ? { "Content-Type": "application/json" } : {}),
         ...(options.headers || {}),
       },
     });
 
     if (!response.ok) {
-      let message = `GitHub API ${response.status}`;
+      let message = `API ${response.status}`;
       try {
         const data = await response.json();
-        if (data.message) message = data.message;
+        if (data.error) message = data.error;
       } catch (error) {
         /* keep default message */
       }
@@ -86,79 +82,22 @@
     return response.json();
   };
 
-  const decodeBase64 = (value) => {
-    const binary = atob(String(value || "").replace(/\s/g, ""));
-    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
-    return new TextDecoder().decode(bytes);
-  };
-
   const getFile = async (path) => {
-    const encoded = path.split("/").map(encodeURIComponent).join("/");
-    try {
-      const data = await api(
-        `/repos/${OWNER}/${REPO}/contents/${encoded}?ref=${BRANCH}`
-      );
-      return { content: decodeBase64(data.content), sha: data.sha };
-    } catch (error) {
-      if (error.status === 404) return { content: "", sha: null };
-      throw error;
-    }
+    const data = await api(
+      `/api/admin/file?path=${encodeURIComponent(path)}`
+    );
+    return { content: data.content || "" };
   };
 
   const commitFiles = async (changes, message) => {
-    const ref = await api(`/repos/${OWNER}/${REPO}/git/ref/heads/${BRANCH}`);
-    const parentSha = ref.object.sha;
-    const parent = await api(
-      `/repos/${OWNER}/${REPO}/git/commits/${parentSha}`
-    );
-
-    const tree = [];
-    for (const change of changes) {
-      if (change.content === null) {
-        tree.push({
-          path: change.path,
-          mode: "100644",
-          type: "blob",
-          sha: null,
-        });
-        continue;
-      }
-
-      const blob = await api(`/repos/${OWNER}/${REPO}/git/blobs`, {
-        method: "POST",
-        body: JSON.stringify({
-          content: change.content,
-          encoding: "utf-8",
-        }),
-      });
-      tree.push({
-        path: change.path,
-        mode: "100644",
-        type: "blob",
-        sha: blob.sha,
-      });
-    }
-
-    const newTree = await api(`/repos/${OWNER}/${REPO}/git/trees`, {
+    const data = await api("/api/admin/commit", {
       method: "POST",
-      body: JSON.stringify({ base_tree: parent.tree.sha, tree }),
+      body: JSON.stringify({ message, changes }),
     });
-
-    const commit = await api(`/repos/${OWNER}/${REPO}/git/commits`, {
-      method: "POST",
-      body: JSON.stringify({
-        message,
-        tree: newTree.sha,
-        parents: [parentSha],
-      }),
-    });
-
-    await api(`/repos/${OWNER}/${REPO}/git/refs/heads/${BRANCH}`, {
-      method: "PATCH",
-      body: JSON.stringify({ sha: commit.sha, force: false }),
-    });
-
-    return commit;
+    return {
+      html_url: data.commit,
+      sha: data.sha,
+    };
   };
 
   /* --- Markdown ---------------------------------------------------------- */
@@ -523,72 +462,39 @@ ${urls
 `;
   };
 
-  /* --- UI: login --------------------------------------------------------- */
+  /* --- UI: access -------------------------------------------------------- */
 
-  const showLogin = () => {
-    $("#login-view").hidden = false;
-    $("#dashboard-view").hidden = true;
-    $("#logout-btn").hidden = true;
-    $("#token").value = "";
-  };
-
-  const showDashboard = () => {
-    $("#login-view").hidden = true;
+  const enterDashboard = (user) => {
+    state.user = user;
+    $("#access-view").hidden = true;
     $("#dashboard-view").hidden = false;
     $("#logout-btn").hidden = false;
+    $("#repo-status").textContent = `${OWNER}/${REPO} · ${BRANCH}${
+      user.email ? " · " + user.email : ""
+    }`;
   };
 
-  const login = async (token) => {
-    state.token = token.trim();
-    const repo = await api(`/repos/${OWNER}/${REPO}`);
-    if (repo.permissions && repo.permissions.push === false) {
-      throw new Error(
-        "这个 Token 没有写入权限。请把 Contents 权限设为 Read and write。"
-      );
-    }
-    sessionStorage.setItem(TOKEN_KEY, state.token);
-    showDashboard();
-    $("#repo-status").textContent = `${OWNER}/${REPO} · ${BRANCH}`;
-    await refreshPosts();
+  const showAccessError = (error) => {
+    $("#access-view").hidden = false;
+    $("#dashboard-view").hidden = true;
+    $("#logout-btn").hidden = true;
+    $("#access-title").textContent = "需要通过 Cloudflare Access 登录";
+    setStatus(
+      $("#access-error"),
+      error.message || "未通过 Cloudflare Access。",
+      "error"
+    );
   };
 
-  $("#login-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const button = $("#login-btn");
-    const errorBox = $("#login-error");
-    const token = $("#token").value.trim();
-
-    setStatus(errorBox, "");
-    if (!token) {
-      setStatus(errorBox, "请输入 GitHub Token。", "error");
-      return;
-    }
-
-    button.disabled = true;
-    button.textContent = "验证中…";
+  const init = async () => {
     try {
-      await login(token);
+      const user = await api("/api/admin/me");
+      enterDashboard(user);
+      await refreshPosts();
     } catch (error) {
-      state.token = "";
-      sessionStorage.removeItem(TOKEN_KEY);
-      setStatus(errorBox, error.message || "登录失败。", "error");
-    } finally {
-      button.disabled = false;
-      button.textContent = "验证并进入";
+      showAccessError(error);
     }
-  });
-
-  $("#logout-btn").addEventListener("click", () => {
-    sessionStorage.removeItem(TOKEN_KEY);
-    state.token = "";
-    state.posts = [];
-    state.filePath = "";
-    state.fileContent = "";
-    $("#posts-list").textContent = "";
-    $("#file-editor").value = "";
-    $("#save-file").disabled = true;
-    showLogin();
-  });
+  };
 
   /* --- UI: tabs ---------------------------------------------------------- */
 
@@ -675,9 +581,8 @@ ${urls
     const status = $("#posts-status");
     setStatus(status, "正在读取文章…");
     try {
-      const file = await getFile("data/posts.json");
-      const parsed = file.content ? JSON.parse(file.content) : [];
-      state.posts = Array.isArray(parsed) ? parsed : [];
+      const data = await api("/api/admin/posts");
+      state.posts = Array.isArray(data.posts) ? data.posts : [];
       state.posts.sort((a, b) =>
         String(b.date).localeCompare(String(a.date))
       );
@@ -950,14 +855,5 @@ ${urls
 
   /* --- Init -------------------------------------------------------------- */
 
-  const savedToken = sessionStorage.getItem(TOKEN_KEY);
-  if (savedToken) {
-    login(savedToken).catch(() => {
-      sessionStorage.removeItem(TOKEN_KEY);
-      state.token = "";
-      showLogin();
-    });
-  } else {
-    showLogin();
-  }
+  init();
 })();

@@ -24,20 +24,31 @@
 
 ## 管理后台
 
-- 地址：`https://amnecorda.com/admin`（由 `admin/index.html` 提供）
-- 功能：查看文章、发布文章、删除文章、编辑站点 HTML/CSS 文件
-- 认证：GitHub Fine-grained Token，只保存在当前标签页的 sessionStorage
+- 地址：`https://amnecorda.com/admin/`
+- 登录：Cloudflare Access（邮箱一次性验证码 / Google / GitHub 等），浏览器不再保存 GitHub Token
+- 服务端：Pages Functions 使用 Cloudflare 加密环境变量 `GITHUB_TOKEN` 提交代码
+- 安全：`/api/admin/*` 会校验 `Cf-Access-Jwt-Assertion`，即使直接访问 `pages.dev` 的 API 也会被拒绝
 - 发布/删除会创建一次 GitHub commit，Cloudflare 会自动部署
 
-### 创建 Token
+### 一次性配置
 
-1. 打开 [GitHub Fine-grained Token 创建页](https://github.com/settings/personal-access-tokens/new)。
-2. Token name 填 `amnecorda-admin`，设置一个过期时间。
-3. Repository access 选择 **Only select repositories**，只勾选 `amnecorda`。
-4. Permissions → Repository permissions → **Contents** 设为 **Read and write**。
-5. Generate token，复制 `github_pat_...`，粘贴到 `/admin` 的登录框。
+1. **创建 GitHub Fine-grained Token**：只授权 `amnecorda`，权限 `Contents: Read and write`，有效期建议 90 天。
+2. **添加 Pages 环境变量**：Cloudflare Pages → 项目 `amnecorda` → Settings → Variables and Secrets：
+   - `GITHUB_TOKEN`：上一步的 Token，类型选 **Secret**
+   - `ACCESS_TEAM_DOMAIN`：Zero Trust 团队域名，例如 `amnecorda.cloudflareaccess.com`（不要带 `https://`）
+   - `ACCESS_AUD`：**API Access 应用**的 Audience Tag
+   - Production 和 Preview 都添加。
+3. **创建两个 Access 应用**（Zero Trust → Access → Applications → Add self-hosted）：
+   - `AMNE CORDA Admin`：域名 `amnecorda.com`，路径 `admin`，策略允许你的邮箱（例如 `wen18792247083@gmail.com`）
+   - `AMNE CORDA Admin API`：域名 `amnecorda.com`，路径 `api/admin`，使用同样的策略
+   - 在 Zero Trust → Settings → Authentication 启用 One-time PIN、Google 或 GitHub 登录方式。
+4. **复制 AUD**：打开 `AMNE CORDA Admin API` 应用，复制它的 Audience Tag 填入 `ACCESS_AUD`。`ACCESS_TEAM_DOMAIN` 填 Zero Trust 的团队域名。
+5. **重新部署**：添加变量后重新触发一次 Pages 部署（`git push` 或 Dashboard 里的 Retry deployment）。
+6. 打开 `https://amnecorda.com/admin/`，通过 Access 登录后进入后台。
 
-> 不要使用包含其他仓库权限的 classic token。Token 泄露时请立即到 GitHub 设置中撤销。
+> 为什么是两个应用：`/admin` 负责让浏览器登录，`/api/admin` 负责给 API 签发 JWT；API 校验的是后者，所以 `ACCESS_AUD` 要填 API 应用的值。
+>
+> 浏览器不再接触 GitHub Token；Token 只存在 Cloudflare 的加密环境变量里。`/api/admin/*` 即使绕过 Access 域名，也会因为缺少有效 JWT 返回 401。
 
 ### 发布与删除
 
@@ -49,8 +60,6 @@
 
 “站点文件”可以直接编辑 `index.html`、`about.html`、`projects.html`、`writing.html`、`assets/css/main.css` 等文件。保存前建议先下载备份；直接改 HTML/CSS 有风险。
 
-> `/admin` 页面本身是公开的，但没有 Token 无法执行任何写操作。如需更强保护，可以在 Cloudflare 给 `/admin*` 添加 Access 策略。
-
 ## 文件结构
 
 ```
@@ -61,6 +70,9 @@ personal-blog/
 ├─ about.html                 关于页
 ├─ admin/index.html           管理后台
 ├─ 404.html                   404 页面
+├─ functions/
+│  ├─ _lib/                   Access JWT 校验、GitHub API
+│  └─ api/admin/              me / posts / file / commit API
 ├─ data/
 │  └─ posts.json              文章索引（后台发布/删除时更新）
 ├─ posts/
@@ -72,7 +84,7 @@ personal-blog/
 │  ├─ css/main.css            站点样式（设计变量在 :root）
 │  ├─ css/admin.css           管理后台样式
 │  ├─ js/main.js              菜单、动态列表、筛选、进度、目录高亮
-│  ├─ js/admin.js             登录、发布/删除文章、GitHub commit、文件编辑
+│  ├─ js/admin.js             Access 后台、发布/删除文章、文件编辑
 │  ├─ img/portrait.svg        黑白排版式肖像
 │  └─ favicon.svg             黑白 A 字标
 ├─ robots.txt
