@@ -53,7 +53,7 @@ GitHub 仓库 `mar08meow/amnecorda` 已连接 Cloudflare Pages，`main` 分支�
 
 ## 外观
 
-- 蓝白主题默认值在 `assets/css/theme.css`：`--paper: #ffffff`、`--ink: #0b1220`、`--accent: #1d4ed8`
+- 蓝白主题默认值在 `assets/css/theme.css`：`--paper: #ffffff`、`--ink: #0b1220`、`--accent: #6b86f0`
 - 名字颜色来自 `.hero-title em { color: var(--accent); }`
 - 夜间模式在 `assets/css/dark.css`，跟随手机/系统的 `prefers-color-scheme`
 - 后台「外观」可以调整颜色、字体、字号、字重和预设；保存后写入 `theme.css` 并触发部署

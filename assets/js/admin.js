@@ -26,7 +26,7 @@
   const THEME_DEFAULTS = {
     paper: "#ffffff",
     ink: "#0b1220",
-    accent: "#1d4ed8",
+    accent: "#6b86f0",
     sans: "inter",
     display: "inter",
     reading: "inter",
