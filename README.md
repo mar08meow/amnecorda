@@ -77,6 +77,17 @@
 
 “站点文件”可以直接编辑 `index.html`、`about.html`、`projects.html`、`writing.html`、`assets/css/main.css` 等文件。保存前建议先下载备份；直接改 HTML/CSS 有风险。
 
+### 外观 / 主题
+
+后台 → **外观** 可以可视化调整整站：
+
+- 页面背景、主文字、强调色；次级文字、分隔线和纸张层次会自动派生
+- 界面字体、标题字体、文章正文字体（Inter / 系统无衬线 / 宋体衬线 / 等宽）
+- 页面基础字号、文章正文字号
+- 预设：黑白极简、暖纸、冷灰、深夜
+
+保存后会写入 `assets/css/theme.css`，创建一次 GitHub commit，Cloudflare 部署后全站生效。想恢复原始黑白，点「恢复默认」再保存。也可以直接在「站点文件」里编辑 `assets/css/theme.css`。
+
 ## 文件结构
 
 ```
@@ -88,8 +99,8 @@ personal-blog/
 ├─ admin/index.html           管理后台
 ├─ 404.html                   404 页面
 ├─ functions/
-│  ├─ _lib/                   Access JWT 校验、GitHub API
-│  └─ api/admin/              me / posts / file / commit API
+│  ├─ _lib/                   Access JWT 校验、GitHub App token、GitHub API
+│  └─ admin/api/              me / posts / file / commit API
 ├─ data/
 │  └─ posts.json              文章索引（后台发布/删除时更新）
 ├─ posts/
@@ -98,10 +109,11 @@ personal-blog/
 │  ├─ whitespace-attention.html
 │  └─ knowledge-pipeline.html
 ├─ assets/
-│  ├─ css/main.css            站点样式（设计变量在 :root）
+│  ├─ css/main.css            站点默认样式（设计变量在 :root）
+│  ├─ css/theme.css           后台「外观」生成的变量覆盖
 │  ├─ css/admin.css           管理后台样式
 │  ├─ js/main.js              菜单、动态列表、筛选、进度、目录高亮
-│  ├─ js/admin.js             Access 后台、发布/删除文章、文件编辑
+│  ├─ js/admin.js             Access 后台、发布/删除、文件编辑、外观
 │  ├─ img/portrait.svg        黑白排版式肖像
 │  └─ favicon.svg             黑白 A 字标
 ├─ robots.txt
@@ -112,7 +124,9 @@ personal-blog/
 
 ## 设计系统
 
-所有可调参数集中在 `assets/css/main.css` 顶部：
+默认参数在 `assets/css/main.css` 顶部；后台「外观」保存后会写入 `assets/css/theme.css` 覆盖这些变量。直接改 `main.css` 仍然有效，但会被 `theme.css` 覆盖。
+
+- 主题：`theme.css` 可覆盖 `--paper`、`--ink`、`--accent`、字体栈与字号；后台会自动派生次级颜色。
 
 - 颜色：`--paper: #ffffff`、`--ink: #0a0a0a`、`--ink-soft: #4a4a4a`、`--muted: #8a8a8a`、`--line`。
 - 字体：Inter（Google Fonts），中文回退到 PingFang SC / Microsoft YaHei。加载失败时仍保持系统无衬线。
