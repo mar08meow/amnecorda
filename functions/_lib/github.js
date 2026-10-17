@@ -12,6 +12,7 @@ const EXACT_PATHS = new Set([
   "assets/css/dark.css",
   "data/posts.json",
   "sitemap.xml",
+  "feed.xml",
   "robots.txt",
   "_headers",
 ]);

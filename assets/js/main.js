@@ -337,4 +337,121 @@
       form.reset();
     });
   }
+  /* Site search ------------------------------------------------------------- */
+  const navRight = document.querySelector(".nav-right");
+  let searchPosts = null;
+
+  if (navRight) {
+    const searchButton = document.createElement("button");
+    searchButton.type = "button";
+    searchButton.className = "nav-search";
+    searchButton.setAttribute("aria-label", "搜索文章");
+    searchButton.innerHTML = 'Search <kbd>/</kbd>';
+    navRight.insertBefore(searchButton, navRight.firstChild);
+
+    const dialog = document.createElement("dialog");
+    dialog.className = "search-dialog";
+    dialog.innerHTML = `
+      <div class="search-panel">
+        <div class="search-head">
+          <input class="search-input" type="search" placeholder="搜索文章…" autocomplete="off" aria-label="搜索文章">
+          <button class="search-close" type="button" aria-label="关闭搜索">Esc</button>
+        </div>
+        <div class="search-results" role="list"></div>
+        <p class="search-hint">支持标题、摘要与分类 · 按 / 打开</p>
+      </div>`;
+    document.body.appendChild(dialog);
+
+    const input = dialog.querySelector(".search-input");
+    const results = dialog.querySelector(".search-results");
+
+    const renderSearch = (query) => {
+      const q = String(query || "").trim().toLowerCase();
+      if (!searchPosts) {
+        results.innerHTML = '<p class="search-empty">正在读取文章…</p>';
+        return;
+      }
+
+      const matched = searchPosts
+        .filter((post) => {
+          if (!q) return true;
+          return [
+            post.title,
+            post.excerpt,
+            post.categoryLabel,
+            post.category,
+            post.date,
+          ]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase()
+            .includes(q);
+        })
+        .slice(0, 8);
+
+      if (!matched.length) {
+        results.innerHTML = '<p class="search-empty">没有找到相关文章。</p>';
+        return;
+      }
+
+      results.innerHTML = matched
+        .map(
+          (post) => `<a class="search-result" href="${rootPrefix}posts/${encodeURIComponent(
+            post.slug
+          )}.html" role="listitem">
+            <span class="search-result-title">${escapeHtml(post.title)}</span>
+            <span class="search-result-meta">${escapeHtml(
+              post.categoryLabel || post.category
+            )} · ${escapeHtml(post.date)}</span>
+            <span class="search-result-excerpt">${escapeHtml(
+              post.excerpt
+            )}</span>
+          </a>`
+        )
+        .join("");
+    };
+
+    const openSearch = async () => {
+      if (dialog.open) return;
+      dialog.showModal();
+      input.value = "";
+      input.focus();
+      renderSearch("");
+      if (!searchPosts) {
+        searchPosts = await loadPosts();
+        renderSearch("");
+      }
+    };
+
+    searchButton.addEventListener("click", openSearch);
+    dialog
+      .querySelector(".search-close")
+      .addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    input.addEventListener("input", () => renderSearch(input.value));
+    input.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") return;
+      const first = results.querySelector("a");
+      if (first) window.location.href = first.href;
+    });
+    document.addEventListener("keydown", (event) => {
+      const target = event.target;
+      const typing =
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
+          target.isContentEditable);
+      if (typing) return;
+      if (
+        event.key === "/" ||
+        ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k")
+      ) {
+        event.preventDefault();
+        openSearch();
+      }
+    });
+  }
 })();

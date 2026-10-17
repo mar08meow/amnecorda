@@ -557,6 +557,53 @@ ${urls
 `;
   };
 
+  const xmlEscape = (value) =>
+    String(value ?? "").replace(/[&<>"']/g, (char) => {
+      const map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&apos;",
+      };
+      return map[char];
+    });
+
+  const buildFeed = (posts) => {
+    const site = "https://amnecorda.com";
+    const sorted = [...posts].sort((a, b) =>
+      String(b.date).localeCompare(String(a.date))
+    );
+    const items = sorted
+      .map((post) => {
+        const url = `${site}/posts/${post.slug}.html`;
+        const pubDate = new Date(`${post.date}T00:00:00+08:00`).toUTCString();
+        return `    <item>
+      <title>${xmlEscape(post.title)}</title>
+      <link>${xmlEscape(url)}</link>
+      <guid isPermaLink="true">${xmlEscape(url)}</guid>
+      <pubDate>${pubDate}</pubDate>
+      <category>${xmlEscape(post.categoryLabel || post.category)}</category>
+      <description>${xmlEscape(post.excerpt)}</description>
+    </item>`;
+      })
+      .join("\n");
+
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AMNE CORDA</title>
+    <link>${site}/</link>
+    <description>AmneCorda 的个人博客：设计系统、工程实践与产品思考。</description>
+    <language>zh-CN</language>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <atom:link href="${site}/feed.xml" rel="self" type="application/rss+xml" />
+${items}
+  </channel>
+</rss>
+`;
+  };
+
   const buildArticleHtml = (post, rendered, sortedPosts) => {
     const index = sortedPosts.findIndex((item) => item.slug === post.slug);
     const next =
@@ -872,7 +919,7 @@ ${urls
   const deletePost = async (post, button) => {
     if (
       !confirm(
-        `确定删除《${post.title}》？\n\n会从 GitHub 删除文章文件，并更新文章列表和 sitemap。`
+        `确定删除《${post.title}》？\n\n会从 GitHub 删除文章文件，并更新文章列表、sitemap 和 RSS。`
       )
     ) {
       return;
@@ -892,6 +939,7 @@ ${urls
             content: JSON.stringify(posts, null, 2) + "\n",
           },
           { path: "sitemap.xml", content: buildSitemap(posts) },
+          { path: "feed.xml", content: buildFeed(posts) },
         ],
         `Delete post: ${post.title}`
       );
@@ -1007,6 +1055,7 @@ ${urls
             content: JSON.stringify(posts, null, 2) + "\n",
           },
           { path: "sitemap.xml", content: buildSitemap(posts) },
+          { path: "feed.xml", content: buildFeed(posts) },
         ],
         `Publish post: ${title}`
       );

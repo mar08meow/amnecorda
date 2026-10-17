@@ -73,6 +73,11 @@
 
 在“文章”列表点删除，会删除文章文件并同步文章列表与 sitemap；其他文章的 “Next entry” 会由前台脚本按最新列表重新计算。
 
+### RSS 与站内搜索
+
+- RSS：`https://amnecorda.com/feed.xml`。页面 `<head>` 有自动发现链接，页脚也有 RSS 入口；后台发布/删除文章时会同时更新 `feed.xml`。
+- 搜索：页头 **Search** 按钮，或按 `/`、`Ctrl/Cmd + K` 打开。搜索基于 `data/posts.json`，匹配标题、摘要和分类，不需要后端。
+
 ### 站点文件
 
 “站点文件”可以直接编辑 `index.html`、`about.html`、`projects.html`、`writing.html`、`assets/css/main.css` 等文件。保存前建议先下载备份；直接改 HTML/CSS 有风险。
@@ -116,12 +121,13 @@ personal-blog/
 │  ├─ css/theme.css           后台「外观」生成的变量覆盖
 │  ├─ css/dark.css            夜间模式（自动跟随系统）
 │  ├─ css/admin.css           管理后台样式
-│  ├─ js/main.js              菜单、动态列表、筛选、进度、目录高亮
+│  ├─ js/main.js              菜单、动态列表、筛选、搜索、进度、目录高亮
 │  ├─ js/admin.js             Access 后台、发布/删除、文件编辑、外观
 │  ├─ img/portrait.svg        黑白排版式肖像
 │  └─ favicon.svg             黑白 A 字标
 ├─ robots.txt
 ├─ sitemap.xml
+├─ feed.xml                   RSS 订阅源（发布/删除时自动更新）
 ├─ _headers                   Cloudflare Pages 安全响应头
 └─ README.md
 ```
