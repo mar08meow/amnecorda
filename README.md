@@ -59,9 +59,10 @@ GitHub 仓库 `mar08meow/amnecorda` 已连接 Cloudflare Pages，`main` 分支�
 - 首页名字、一句话介绍、介绍段落
 - About me 两段文字
 - 联系区文字、GitHub / X / Email 链接
-- AppPantry 与 HyperOS 两个项目的名称和描述
+- 项目的添加、删除和编辑：名称、平台/年份、描述、标签、GitHub 链接、Release 仓库、下载类型
+- AppPantry 与 HyperOS 的下载按钮会自动跟随各自最新 Release
 
-保存后会重写 `index.html`、创建 GitHub commit，并自动触发 Cloudflare 部署。新增项目或修改更复杂的结构，请使用「站点文件」。
+保存后会重写 `index.html`、创建 GitHub commit，并自动触发 Cloudflare 部署。新增或删除项目可以直接在「内容」页完成；更复杂的结构再使用「站点文件」。
 
 ## 外观
 

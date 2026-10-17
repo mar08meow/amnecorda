@@ -616,6 +616,50 @@ textarea {
   color: var(--soft);
 }
 
+.projects-editor {
+  display: grid;
+  gap: 14px;
+  margin: 8px 0 14px;
+}
+
+.project-editor-item {
+  padding: 14px;
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.project-editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.project-editor-head strong {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.project-editor-item .form-grid {
+  gap: 12px;
+}
+
+.project-editor-kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  font-size: 12px;
+}
+
+.project-editor-kinds label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .theme-controls {
   display: grid;
   gap: 0;

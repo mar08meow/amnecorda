@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/admin.css?v=simple1">
+  <link rel="stylesheet" href="/assets/css/admin.css?v=project1">
 </head>
 <body>
   <header class="admin-top">
@@ -167,7 +167,7 @@
           <h2>页面内容</h2>
           <span class="repo-line">文字与链接 · 保存后自动部署</span>
         </div>
-        <p class="repo-line">项目下载按钮会自动跟随 GitHub 最新 Release；这里修改名称和描述。新增项目请使用「站点文件」。</p>
+        <p class="repo-line">项目可以在这里添加、删除和编辑；下载按钮会自动跟随 GitHub 最新 Release。</p>
 
         <form id="content-form">
           <div class="form-grid">
@@ -219,21 +219,11 @@
               <input id="content-email" type="email">
             </div>
 
-            <div class="field">
-              <label for="content-appantry-title">项目一名称</label>
-              <input id="content-appantry-title" type="text">
-            </div>
             <div class="field full">
-              <label for="content-appantry-desc">AppPantry 描述</label>
-              <textarea id="content-appantry-desc" rows="3"></textarea>
-            </div>
-            <div class="field">
-              <label for="content-lsp-title">项目二名称</label>
-              <input id="content-lsp-title" type="text">
-            </div>
-            <div class="field full">
-              <label for="content-lsp-desc">HyperOS 描述</label>
-              <textarea id="content-lsp-desc" rows="3"></textarea>
+              <label>项目</label>
+              <div id="projects-editor" class="projects-editor"></div>
+              <button class="btn btn-ghost" type="button" id="add-project">添加项目</button>
+              <small>项目按顺序显示；勾选「重点显示」会有加粗边框。下载按钮会自动跟随 Release。</small>
             </div>
           </div>
 
@@ -366,6 +356,6 @@
     </section>
   </main>
 
-  <script src="/assets/js/admin.js?v=content1"></script>
+  <script src="/assets/js/admin.js?v=project1"></script>
 </body>
 </html>

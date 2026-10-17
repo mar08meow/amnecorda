@@ -396,6 +396,195 @@
     if (node) node.textContent = value;
   };
 
+  const parseProjects = (doc) => {
+    const cleanMeta = (value) =>
+      String(value || "").replace(/\s*·\s*$/, "").trim();
+
+    return Array.from(
+      doc.querySelectorAll("#projects .project-item")
+    ).map((card) => {
+      const year = card.querySelector(".project-year");
+      const yearClone = year ? year.cloneNode(true) : null;
+      yearClone
+        ?.querySelectorAll("[data-release-version]")
+        .forEach((node) => node.remove());
+
+      const noteNode = card.querySelector(".project-meta");
+      const noteClone = noteNode ? noteNode.cloneNode(true) : null;
+      noteClone
+        ?.querySelectorAll("[data-release-notes]")
+        .forEach((node) => node.remove());
+
+      const github = Array.from(
+        card.querySelectorAll('a[href^="https://github.com"]')
+      ).find(
+        (link) =>
+          !link.hasAttribute("data-release-download") &&
+          !link.hasAttribute("data-release-notes")
+      );
+
+      return {
+        title: textOf(card, ".project-title"),
+        meta: cleanMeta(yearClone?.textContent || ""),
+        note: cleanMeta(noteClone?.textContent || ""),
+        description: textOf(card, ".project-desc"),
+        tags: Array.from(card.querySelectorAll(".project-tags li"))
+          .map((item) => item.textContent.trim())
+          .filter(Boolean),
+        github: github?.getAttribute("href") || "",
+        repo:
+          card.querySelector("[data-release-repo]")?.dataset.releaseRepo || "",
+        downloads: Array.from(
+          card.querySelectorAll("[data-release-download]")
+        )
+          .map((link) => link.dataset.releaseDownload)
+          .filter(Boolean),
+        featured: card.classList.contains("project-item--featured"),
+      };
+    });
+  };
+
+  const projectDownloadOptions = [
+    ["portable", "便携版 .exe"],
+    ["setup", "安装版 .exe"],
+    ["apk", "Android .apk"],
+  ];
+
+  const renderProjectEditor = (projects) => {
+    const container = $("#projects-editor");
+    if (!container) return;
+
+    container.innerHTML = (projects || [])
+      .map((project, index) => {
+        const downloads = Array.isArray(project.downloads)
+          ? project.downloads
+          : [];
+        const tags = Array.isArray(project.tags) ? project.tags.join(", ") : "";
+        return `<div class="project-editor-item" data-project-index="${index}">
+          <div class="project-editor-head">
+            <strong>项目 ${index + 1}</strong>
+            <button type="button" class="btn btn-ghost" data-remove-project="${index}">删除</button>
+          </div>
+          <div class="form-grid">
+            <div class="field"><label>名称</label><input data-field="title" type="text" value="${escapeHtml(project.title || "")}" required></div>
+            <div class="field"><label>平台 / 年份</label><input data-field="meta" type="text" value="${escapeHtml(project.meta || "")}" placeholder="Windows · 2026"></div>
+            <div class="field full"><label>描述</label><textarea data-field="description" rows="3">${escapeHtml(project.description || "")}</textarea></div>
+            <div class="field full"><label>标签（用逗号分隔）</label><input data-field="tags" type="text" value="${escapeHtml(tags)}" placeholder="Windows, Electron, winget"></div>
+            <div class="field full"><label>GitHub 链接</label><input data-field="github" type="url" value="${escapeHtml(project.github || "")}" placeholder="https://github.com/..."></div>
+            <div class="field"><label>系统 / 大小</label><input data-field="note" type="text" value="${escapeHtml(project.note || "")}" placeholder="Windows 10/11 · 约 100 MB"></div>
+            <div class="field"><label>Release 仓库（可选）</label><input data-field="repo" type="text" value="${escapeHtml(project.repo || "")}" placeholder="mar08meow/AppPantry"></div>
+            <div class="field full"><label>下载文件</label><div class="project-editor-kinds">${projectDownloadOptions.map(([kind, label]) => `<label><input type="checkbox" data-download="${kind}" ${downloads.includes(kind) ? "checked" : ""}> ${label}</label>`).join("")}</div></div>
+            <div class="field"><label><input type="checkbox" data-field="featured" ${project.featured ? "checked" : ""}> 重点显示</label></div>
+          </div>
+        </div>`;
+      })
+      .join("");
+  };
+
+  const collectProjects = () =>
+    Array.from(
+      document.querySelectorAll("#projects-editor .project-editor-item")
+    ).map((item) => ({
+      title: item.querySelector('[data-field="title"]')?.value.trim() || "",
+      meta: item.querySelector('[data-field="meta"]')?.value.trim() || "",
+      note: item.querySelector('[data-field="note"]')?.value.trim() || "",
+      description:
+        item.querySelector('[data-field="description"]')?.value.trim() || "",
+      tags: (item.querySelector('[data-field="tags"]')?.value || "")
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean),
+      github:
+        item.querySelector('[data-field="github"]')?.value.trim() || "",
+      repo: item.querySelector('[data-field="repo"]')?.value.trim() || "",
+      downloads: Array.from(
+        item.querySelectorAll("[data-download]:checked")
+      ).map((input) => input.dataset.download),
+      featured: Boolean(
+        item.querySelector('[data-field="featured"]')?.checked
+      ),
+    }));
+
+  const buildProjectCard = (project) => {
+    const repo = String(project.repo || "").trim();
+    const meta = String(project.meta || "").trim();
+    const note = String(project.note || "").trim();
+    const labels = {
+      portable: "下载便携版",
+      setup: "下载安装版",
+      apk: "下载 APK",
+    };
+    const version = repo
+      ? ` · <span data-release-repo="${escapeHtml(
+          repo
+        )}" data-release-version>latest</span>`
+      : "";
+    const year = meta
+      ? `${escapeHtml(meta)}${version}`
+      : version.replace(/^ · /, "");
+    const downloadLinks = repo
+      ? (project.downloads || [])
+          .map(
+            (kind, index) =>
+              `<a class="button${
+                index === 0 ? "" : " button--ghost"
+              }" href="https://github.com/${escapeHtml(
+                repo
+              )}/releases/latest" data-release-repo="${escapeHtml(
+                repo
+              )}" data-release-download="${escapeHtml(
+                kind
+              )}" target="_blank" rel="noopener noreferrer">${
+                labels[kind] || "下载"
+              }</a>`
+          )
+          .join("")
+      : "";
+    const github = project.github
+      ? `<a class="text-link" href="${escapeHtml(
+          project.github
+        )}" target="_blank" rel="noopener noreferrer">GitHub <span class="arrow" aria-hidden="true">↗</span></a>`
+      : "";
+    const actions =
+      downloadLinks || github
+        ? `<div class="project-actions">${downloadLinks}${github}</div>`
+        : "";
+    const release = repo
+      ? `<a href="https://github.com/${escapeHtml(
+          repo
+        )}/releases/latest" data-release-repo="${escapeHtml(
+          repo
+        )}" data-release-notes target="_blank" rel="noopener noreferrer">Release notes ↗</a>`
+      : "";
+    const metaLine =
+      note || release
+        ? `<p class="project-meta">${note ? escapeHtml(note) : ""}${
+            note && release ? " · " : ""
+          }${release}</p>`
+        : "";
+    const tags =
+      Array.isArray(project.tags) && project.tags.length
+        ? `<ul class="project-tags">${project.tags
+            .map((tag) => `<li>${escapeHtml(tag)}</li>`)
+            .join("")}</ul>`
+        : "";
+
+    return `<article class="project-item${
+      project.featured ? " project-item--featured" : ""
+    }">
+  <div>
+    <div class="project-head">
+      <h2 class="project-title">${escapeHtml(project.title)}</h2>
+      <span class="project-year">${year}</span>
+    </div>
+    <p class="project-desc">${escapeHtml(project.description)}</p>
+    ${actions}
+    ${metaLine}
+  </div>
+  ${tags}
+</article>`;
+  };
+
   const loadContent = async () => {
     if (state.contentLoaded && state.contentDoc) return;
     const status = $("#content-status");
@@ -441,22 +630,7 @@
         "content-email",
         findHref("mailto:").replace(/^mailto:/, "")
       );
-      setFieldValue(
-        "content-appantry-title",
-        textOf(doc, "#appantry .project-title")
-      );
-      setFieldValue(
-        "content-appantry-desc",
-        textOf(doc, "#appantry .project-desc")
-      );
-      setFieldValue(
-        "content-lsp-title",
-        textOf(doc, "#hyperos-blur-fix .project-title")
-      );
-      setFieldValue(
-        "content-lsp-desc",
-        textOf(doc, "#hyperos-blur-fix .project-desc")
-      );
+      renderProjectEditor(parseProjects(doc));
 
       setStatus(status, "已读取当前页面内容。");
     } catch (error) {
@@ -529,14 +703,15 @@
       });
     }
 
-    const appTitle = getFieldValue("content-appantry-title");
-    const appDesc = getFieldValue("content-appantry-desc");
-    const lspTitle = getFieldValue("content-lsp-title");
-    const lspDesc = getFieldValue("content-lsp-desc");
-    if (appTitle) setText(doc, "#appantry .project-title", appTitle);
-    if (appDesc) setText(doc, "#appantry .project-desc", appDesc);
-    if (lspTitle) setText(doc, "#hyperos-blur-fix .project-title", lspTitle);
-    if (lspDesc) setText(doc, "#hyperos-blur-fix .project-desc", lspDesc);
+    const projects = collectProjects();
+    if (projects.some((project) => !project.title)) {
+      setStatus(status, "项目名称不能为空。", "error");
+      return;
+    }
+    const projectList = doc.querySelector("#projects .project-list");
+    if (projectList) {
+      projectList.innerHTML = projects.map(buildProjectCard).join("\n");
+    }
 
     button.disabled = true;
     setStatus(status, "正在提交页面内容…");
@@ -563,6 +738,30 @@
   };
 
   $("#content-form")?.addEventListener("submit", saveContent);
+
+  $("#add-project")?.addEventListener("click", () => {
+    const projects = collectProjects();
+    projects.push({
+      title: "新项目",
+      meta: "",
+      note: "",
+      description: "",
+      tags: [],
+      github: "",
+      repo: "",
+      downloads: [],
+      featured: false,
+    });
+    renderProjectEditor(projects);
+  });
+
+  $("#projects-editor")?.addEventListener("click", (event) => {
+    const remove = event.target.closest("[data-remove-project]");
+    if (!remove) return;
+    const projects = collectProjects();
+    projects.splice(Number(remove.dataset.removeProject), 1);
+    renderProjectEditor(projects);
+  });
 
   /* --- Markdown ---------------------------------------------------------- */
 
