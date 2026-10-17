@@ -3,7 +3,8 @@
 黑白极简的个人主页：纯白底、黑字、Inter 无衬线、左侧固定栏、细线分隔、大留白。首页以自我介绍为主，写作与项目作为独立入口；内容方向为设计系统、工程实践与产品思考。
 
 - 本地目录：`D:\AI\workspace\personal-blog`
-- 线上域名：`https://amnecorda.com`（待部署）
+- 线上域名：`https://amnecorda.com`（已上线，Cloudflare Pages + GitHub 自动部署）
+- 临时地址：`https://amnecorda.pages.dev`
 - 部署包：`D:\AI\workspace\amnecorda-site.zip`
 - 旧版暖色纸感备份：`D:\AI\workspace\personal-blog-warm-backup`
 
