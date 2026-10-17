@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/admin.css?v=access3">
+  <link rel="stylesheet" href="/assets/css/admin.css?v=theme1">
 </head>
 <body>
   <header class="admin-top">
@@ -47,6 +47,7 @@
         <button type="button" data-tab="posts" class="is-active">文章</button>
         <button type="button" data-tab="new">写新文章</button>
         <button type="button" data-tab="files">站点文件</button>
+        <button type="button" data-tab="appearance">外观</button>
       </nav>
 
       <section class="admin-panel" id="panel-posts">
@@ -145,6 +146,7 @@
             <option value="projects.html">projects.html</option>
             <option value="writing.html">writing.html</option>
             <option value="assets/css/main.css">assets/css/main.css</option>
+            <option value="assets/css/theme.css">assets/css/theme.css</option>
             <option value="_headers">_headers</option>
             <option value="robots.txt">robots.txt</option>
           </select>
@@ -160,9 +162,111 @@
         </div>
         <p class="status" id="file-status" role="status"></p>
       </section>
+
+      <section class="admin-panel" id="panel-appearance" hidden>
+        <div class="panel-head">
+          <h2>外观</h2>
+          <span class="repo-line">颜色、字体与字号 · 保存后全站生效</span>
+        </div>
+
+        <div class="theme-layout">
+          <div class="theme-controls">
+            <div class="theme-group">
+              <h3>颜色</h3>
+              <div class="theme-color-row">
+                <label for="theme-paper">页面背景</label>
+                <input type="color" id="theme-paper" value="#ffffff">
+                <span class="theme-hex" data-theme-hex="paper">#ffffff</span>
+              </div>
+              <div class="theme-color-row">
+                <label for="theme-ink">主文字</label>
+                <input type="color" id="theme-ink" value="#0a0a0a">
+                <span class="theme-hex" data-theme-hex="ink">#0a0a0a</span>
+              </div>
+              <div class="theme-color-row">
+                <label for="theme-accent">强调色</label>
+                <input type="color" id="theme-accent" value="#0a0a0a">
+                <span class="theme-hex" data-theme-hex="accent">#0a0a0a</span>
+              </div>
+            </div>
+
+            <div class="theme-group">
+              <h3>字体</h3>
+              <div class="theme-field">
+                <label for="theme-sans">界面字体</label>
+                <select id="theme-sans">
+                  <option value="inter">Inter / 无衬线</option>
+                  <option value="system">系统无衬线</option>
+                  <option value="serif">宋体 / 衬线</option>
+                  <option value="mono">等宽</option>
+                </select>
+              </div>
+              <div class="theme-field">
+                <label for="theme-display">标题字体</label>
+                <select id="theme-display">
+                  <option value="inter">Inter / 无衬线</option>
+                  <option value="system">系统无衬线</option>
+                  <option value="serif">宋体 / 衬线</option>
+                  <option value="mono">等宽</option>
+                </select>
+              </div>
+              <div class="theme-field">
+                <label for="theme-reading">文章正文字体</label>
+                <select id="theme-reading">
+                  <option value="inter">Inter / 无衬线</option>
+                  <option value="system">系统无衬线</option>
+                  <option value="serif">宋体 / 衬线</option>
+                  <option value="mono">等宽</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="theme-group">
+              <h3>字号</h3>
+              <div class="theme-field">
+                <label for="theme-base">页面基础字号 <output id="theme-base-value">16px</output></label>
+                <input id="theme-base" type="range" min="14" max="20" step="1" value="16">
+              </div>
+              <div class="theme-field">
+                <label for="theme-reading-size">文章正文字号 <output id="theme-reading-value">16.5px</output></label>
+                <input id="theme-reading-size" type="range" min="15" max="22" step="0.5" value="16.5">
+              </div>
+            </div>
+
+            <div class="theme-group">
+              <h3>预设</h3>
+              <div class="theme-presets">
+                <button type="button" class="theme-preset" data-preset="mono">黑白极简</button>
+                <button type="button" class="theme-preset" data-preset="warm">暖纸</button>
+                <button type="button" class="theme-preset" data-preset="cool">冷灰</button>
+                <button type="button" class="theme-preset" data-preset="night">深夜</button>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-primary" type="button" id="save-theme">保存外观</button>
+              <button class="btn btn-ghost" type="button" id="reset-theme">恢复默认</button>
+            </div>
+            <p class="status" id="theme-status" role="status"></p>
+          </div>
+
+          <aside class="theme-preview" id="theme-preview" aria-label="外观预览">
+            <div class="theme-preview-rail">
+              <span>AMNE<br>CORDA</span>
+              <small>HOME / WRITING / PROJECTS / ABOUT</small>
+            </div>
+            <div class="theme-preview-main">
+              <p class="theme-preview-kicker">PREVIEW</p>
+              <h3>把复杂的事，<br>写得清楚一点。</h3>
+              <p>好的产品不是功能堆出来的，而是由一连串克制的决定长出来的。</p>
+              <span class="theme-preview-link">Read writing ↗</span>
+            </div>
+          </aside>
+        </div>
+      </section>
     </section>
   </main>
 
-  <script src="/assets/js/admin.js?v=access3"></script>
+  <script src="/assets/js/admin.js?v=theme1"></script>
 </body>
 </html>

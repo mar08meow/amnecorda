@@ -8,6 +8,7 @@ const EXACT_PATHS = new Set([
   "projects.html",
   "writing.html",
   "assets/css/main.css",
+  "assets/css/theme.css",
   "data/posts.json",
   "sitemap.xml",
   "robots.txt",
