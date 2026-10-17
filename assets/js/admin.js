@@ -84,13 +84,13 @@
 
   const getFile = async (path) => {
     const data = await api(
-      `/api/admin/file?path=${encodeURIComponent(path)}`
+      `/admin/api/file?path=${encodeURIComponent(path)}`
     );
     return { content: data.content || "" };
   };
 
   const commitFiles = async (changes, message) => {
-    const data = await api("/api/admin/commit", {
+    const data = await api("/admin/api/commit", {
       method: "POST",
       body: JSON.stringify({ message, changes }),
     });
@@ -488,7 +488,7 @@ ${urls
 
   const init = async () => {
     try {
-      const user = await api("/api/admin/me");
+      const user = await api("/admin/api/me");
       enterDashboard(user);
       await refreshPosts();
     } catch (error) {
@@ -581,7 +581,7 @@ ${urls
     const status = $("#posts-status");
     setStatus(status, "正在读取文章…");
     try {
-      const data = await api("/api/admin/posts");
+      const data = await api("/admin/api/posts");
       state.posts = Array.isArray(data.posts) ? data.posts : [];
       state.posts.sort((a, b) =>
         String(b.date).localeCompare(String(a.date))

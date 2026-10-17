@@ -27,36 +27,36 @@
 - 地址：`https://amnecorda.com/admin/`
 - 登录：Cloudflare Access（邮箱一次性验证码 / Google / GitHub 等），浏览器不再保存 GitHub Token
 - 服务端：Pages Functions 使用 Cloudflare 加密环境变量 `GITHUB_TOKEN` 提交代码
-- 安全：`/api/admin/*` 会校验 `Cf-Access-Jwt-Assertion`，即使直接访问 `pages.dev` 的 API 也会被拒绝
+- 安全：`/admin/api/*` 会校验 `Cf-Access-Jwt-Assertion`，即使直接访问 `pages.dev` 的 API 也会被拒绝
 - 发布/删除会创建一次 GitHub commit，Cloudflare 会自动部署
 
 ### 当前配置
 
-- Access 应用：`AMNE CORDA Admin`（路径 `/admin`）与 `AMNE CORDA Admin API`（路径 `/api/admin`）
+- Access 应用：`AMNE CORDA Admin`（路径 `/admin`，同时覆盖 `/admin` 页面与 `/admin/api/*`）
 - 策略：`Owner only`，只允许 `wen18792247083@gmail.com`
 - 登录方式：Cloudflare Access 登录页中的 “Sign in with Cloudflare”
 - Pages 环境变量：`GITHUB_TOKEN`（Secret）、`ACCESS_TEAM_DOMAIN`、`ACCESS_AUD`
-- GitHub Token 只授权 `amnecorda`，权限为 `Contents: Read and write`，有效期 90 天
+- GitHub Token 只授权 `amnecorda`，权限为 `Contents: Read and write`，当前有效期 30 天（2026-11-16 到期）
 
 ### 一次性配置
 
-1. **创建 GitHub Fine-grained Token**：只授权 `amnecorda`，权限 `Contents: Read and write`，有效期建议 90 天。
+1. **创建 GitHub Fine-grained Token**：只授权 `amnecorda`，权限 `Contents: Read and write`，有效期建议 30—90 天。
 2. **添加 Pages 环境变量**：Cloudflare Pages → 项目 `amnecorda` → Settings → Variables and Secrets：
    - `GITHUB_TOKEN`：上一步的 Token，类型选 **Secret**
    - `ACCESS_TEAM_DOMAIN`：Zero Trust 团队域名，例如 `amnecorda.cloudflareaccess.com`（不要带 `https://`）
-   - `ACCESS_AUD`：**API Access 应用**的 Audience Tag
+   - `ACCESS_AUD`：**AMNE CORDA Admin 应用**的 Audience Tag
    - Production 和 Preview 都添加。
-3. **创建两个 Access 应用**（Zero Trust → Access → Applications → Add self-hosted）：
+3. **创建一个 Access 应用**（Zero Trust → Access → Applications → Add self-hosted）：
    - `AMNE CORDA Admin`：域名 `amnecorda.com`，路径 `admin`，策略允许你的邮箱（例如 `wen18792247083@gmail.com`）
-   - `AMNE CORDA Admin API`：域名 `amnecorda.com`，路径 `api/admin`，使用同样的策略
+   - 这个路径同时覆盖 `/admin` 页面和 `/admin/api/*`，不需要第二个应用。
    - 在 Zero Trust → Settings → Authentication 启用 One-time PIN、Google 或 GitHub 登录方式。
-4. **复制 AUD**：打开 `AMNE CORDA Admin API` 应用，复制它的 Audience Tag 填入 `ACCESS_AUD`。`ACCESS_TEAM_DOMAIN` 填 Zero Trust 的团队域名。
+4. **复制 AUD**：打开 `AMNE CORDA Admin` 应用 → 其他设置 → AUD 标签，复制 Audience Tag 填入 `ACCESS_AUD`。`ACCESS_TEAM_DOMAIN` 填 Zero Trust 的团队域名。
 5. **重新部署**：添加变量后重新触发一次 Pages 部署（`git push` 或 Dashboard 里的 Retry deployment）。
 6. 打开 `https://amnecorda.com/admin/`，通过 Access 登录后进入后台。
 
-> 为什么是两个应用：`/admin` 负责让浏览器登录，`/api/admin` 负责给 API 签发 JWT；API 校验的是后者，所以 `ACCESS_AUD` 要填 API 应用的值。
+> 一个应用就够了：`/admin` 与 `/admin/api/*` 共用同一个 Access 会话和 AUD，避免 API 被单独重定向到登录页。
 >
-> 浏览器不再接触 GitHub Token；Token 只存在 Cloudflare 的加密环境变量里。`/api/admin/*` 即使绕过 Access 域名，也会因为缺少有效 JWT 返回 401。
+> 浏览器不再接触 GitHub Token；Token 只存在 Cloudflare 的加密环境变量里。`/admin/api/*` 即使绕过 Access 域名，也会因为缺少有效 JWT 返回 401。
 
 ### 发布与删除
 

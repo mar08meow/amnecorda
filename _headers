@@ -5,4 +5,4 @@
   Permissions-Policy: geolocation=(), microphone=(), camera=()
 
 /assets/*
-  Cache-Control: public, max-age=3600
+  Cache-Control: public, max-age=0, must-revalidate
