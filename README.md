@@ -25,8 +25,8 @@
 ## 管理后台
 
 - 地址：`https://amnecorda.com/admin/`
-- 登录：Cloudflare Access（邮箱一次性验证码 / Google / GitHub 等），浏览器不再保存 GitHub Token
-- 服务端：Pages Functions 使用 Cloudflare 加密环境变量 `GITHUB_TOKEN` 提交代码
+- 登录：Cloudflare Access（Sign in with Cloudflare），浏览器不保存任何 GitHub 凭据
+- 服务端：Pages Functions 用 GitHub App 私钥换取 installation token，自动刷新（约 1 小时）
 - 安全：`/admin/api/*` 会校验 `Cf-Access-Jwt-Assertion`，即使直接访问 `pages.dev` 的 API 也会被拒绝
 - 发布/删除会创建一次 GitHub commit，Cloudflare 会自动部署
 
@@ -35,28 +35,37 @@
 - Access 应用：`AMNE CORDA Admin`（路径 `/admin`，同时覆盖 `/admin` 页面与 `/admin/api/*`）
 - 策略：`Owner only`，只允许 `wen18792247083@gmail.com`
 - 登录方式：Cloudflare Access 登录页中的 “Sign in with Cloudflare”
-- Pages 环境变量：`GITHUB_TOKEN`（Secret）、`ACCESS_TEAM_DOMAIN`、`ACCESS_AUD`
-- GitHub Token 只授权 `amnecorda`，权限为 `Contents: Read and write`，当前有效期 30 天（2026-11-16 到期）
+- Pages 环境变量：`GITHUB_APP_ID`、`GITHUB_APP_INSTALLATION_ID`、`GITHUB_APP_PRIVATE_KEY`（Secret）、`ACCESS_TEAM_DOMAIN`、`ACCESS_AUD`
+- GitHub App：`amnecorda-admin`，只安装到 `mar08meow/amnecorda`，权限为 `Contents: Read and write`
+- 旧的 `GITHUB_TOKEN` 不再使用，确认新链路正常后可以删除
 
 ### 一次性配置
 
-1. **创建 GitHub Fine-grained Token**：只授权 `amnecorda`，权限 `Contents: Read and write`，有效期建议 30—90 天。
-2. **添加 Pages 环境变量**：Cloudflare Pages → 项目 `amnecorda` → Settings → Variables and Secrets：
-   - `GITHUB_TOKEN`：上一步的 Token，类型选 **Secret**
-   - `ACCESS_TEAM_DOMAIN`：Zero Trust 团队域名，例如 `amnecorda.cloudflareaccess.com`（不要带 `https://`）
-   - `ACCESS_AUD`：**AMNE CORDA Admin 应用**的 Audience Tag
-   - Production 和 Preview 都添加。
-3. **创建一个 Access 应用**（Zero Trust → Access → Applications → Add self-hosted）：
-   - `AMNE CORDA Admin`：域名 `amnecorda.com`，路径 `admin`，策略允许你的邮箱（例如 `wen18792247083@gmail.com`）
-   - 这个路径同时覆盖 `/admin` 页面和 `/admin/api/*`，不需要第二个应用。
-   - 在 Zero Trust → Settings → Authentication 启用 One-time PIN、Google 或 GitHub 登录方式。
-4. **复制 AUD**：打开 `AMNE CORDA Admin` 应用 → 其他设置 → AUD 标签，复制 Audience Tag 填入 `ACCESS_AUD`。`ACCESS_TEAM_DOMAIN` 填 Zero Trust 的团队域名。
-5. **重新部署**：添加变量后重新触发一次 Pages 部署（`git push` 或 Dashboard 里的 Retry deployment）。
-6. 打开 `https://amnecorda.com/admin/`，通过 Access 登录后进入后台。
+1. **创建 GitHub App**：GitHub → Settings → Developer settings → GitHub Apps → New GitHub App：
+   - Homepage URL 填 `https://amnecorda.com`
+   - 关闭 Webhook
+   - Repository permissions → Contents 设为 `Read and write`
+   - 选择 `Only on this account`
+2. **生成私钥并安装**：在 App 的 Credentials 页生成 private key；在 Install App 页只选择 `amnecorda` 仓库。
+3. **转换私钥格式**：GitHub 下载的是 PKCS#1（`BEGIN RSA PRIVATE KEY`），Cloudflare Workers 需要 PKCS#8：
+   ```bash
+   openssl pkcs8 -topk8 -nocrypt -in private-key.pem -out private-key.pk8
+   ```
+4. **添加 Pages 环境变量**：Cloudflare Pages → 项目 `amnecorda` → Settings → Variables and Secrets：
+   - `GITHUB_APP_ID`：GitHub App 的 App ID
+   - `GITHUB_APP_INSTALLATION_ID`：安装到仓库后的 installation ID（安装页 URL 末尾的数字）
+   - `GITHUB_APP_PRIVATE_KEY`：上一步生成的 PKCS#8 PEM，类型选 **Secret**
+   - `ACCESS_TEAM_DOMAIN`：Zero Trust 团队域名
+   - `ACCESS_AUD`：`AMNE CORDA Admin` 应用的 Audience Tag
+5. **创建一个 Access 应用**（Zero Trust → Access → Applications → Add self-hosted）：
+   - 域名 `amnecorda.com`，路径 `admin`，策略允许你的邮箱
+   - 该路径同时覆盖 `/admin` 和 `/admin/api/*`
+6. **重新部署**：`git push` 或 Dashboard 的 Retry deployment。
+7. 打开 `https://amnecorda.com/admin/`，通过 Access 登录。
 
-> 一个应用就够了：`/admin` 与 `/admin/api/*` 共用同一个 Access 会话和 AUD，避免 API 被单独重定向到登录页。
+> GitHub App 的 installation token 由服务端自动获取并缓存，过期前刷新，不需要定时续期。
 >
-> 浏览器不再接触 GitHub Token；Token 只存在 Cloudflare 的加密环境变量里。`/admin/api/*` 即使绕过 Access 域名，也会因为缺少有效 JWT 返回 401。
+> 浏览器不接触私钥或 Token；`/admin/api/*` 即使绕过 Access 域名，也会因为缺少有效 JWT 返回 401。
 
 ### 发布与删除
 

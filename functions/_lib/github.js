@@ -39,16 +39,121 @@ export function assertAllowedPath(path) {
   throw new GitHubError("不允许修改该文件", 400);
 }
 
-async function githubRequest(env, path, options = {}) {
-  if (!env.GITHUB_TOKEN) {
-    throw new GitHubError("Cloudflare 环境变量 GITHUB_TOKEN 未配置");
+const GITHUB_API = "https://api.github.com";
+
+let cachedToken = null;
+let cachedTokenExpiry = 0;
+
+const base64url = (value) => {
+  const bytes =
+    typeof value === "string"
+      ? new TextEncoder().encode(value)
+      : new Uint8Array(value);
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+};
+
+const pemToArrayBuffer = (pem) => {
+  const base64 = String(pem)
+    .replace(/-----BEGIN [^-]+-----/g, "")
+    .replace(/-----END [^-]+-----/g, "")
+    .replace(/\s+/g, "");
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+  return bytes.buffer;
+};
+
+async function createAppJwt(env) {
+  if (!env.GITHUB_APP_ID || !env.GITHUB_APP_PRIVATE_KEY) {
+    throw new GitHubError("GitHub App 环境变量未配置");
   }
 
-  const response = await fetch(`https://api.github.com${path}`, {
+  const now = Math.floor(Date.now() / 1000);
+  const header = base64url(JSON.stringify({ alg: "RS256", typ: "JWT" }));
+  const payload = base64url(
+    JSON.stringify({
+      iat: now - 60,
+      exp: now + 540,
+      iss: String(env.GITHUB_APP_ID),
+    })
+  );
+  const unsigned = `${header}.${payload}`;
+
+  const key = await crypto.subtle.importKey(
+    "pkcs8",
+    pemToArrayBuffer(env.GITHUB_APP_PRIVATE_KEY),
+    { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const signature = await crypto.subtle.sign(
+    "RSASSA-PKCS1-v1_5",
+    key,
+    new TextEncoder().encode(unsigned)
+  );
+
+  return `${unsigned}.${base64url(signature)}`;
+}
+
+async function getInstallationToken(env) {
+  if (cachedToken && Date.now() < cachedTokenExpiry - 60_000) {
+    return cachedToken;
+  }
+  if (!env.GITHUB_APP_INSTALLATION_ID) {
+    throw new GitHubError(
+      "Cloudflare 环境变量 GITHUB_APP_INSTALLATION_ID 未配置"
+    );
+  }
+
+  const jwt = await createAppJwt(env);
+  const response = await fetch(
+    `${GITHUB_API}/app/installations/${encodeURIComponent(
+      env.GITHUB_APP_INSTALLATION_ID
+    )}/access_tokens`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: `Bearer ${jwt}`,
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "amnecorda-admin",
+      },
+    }
+  );
+
+  const text = await response.text();
+  let data = null;
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch (error) {
+      data = text;
+    }
+  }
+  if (!response.ok) {
+    throw new GitHubError(
+      (data && data.message) || `GitHub App token ${response.status}`,
+      response.status
+    );
+  }
+
+  cachedToken = data.token;
+  cachedTokenExpiry = Date.parse(data.expires_at) || Date.now() + 3_600_000;
+  return cachedToken;
+}
+
+async function githubRequest(env, path, options = {}) {
+  const token = await getInstallationToken(env);
+
+  const response = await fetch(`${GITHUB_API}${path}`, {
     ...options,
     headers: {
       Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${env.GITHUB_TOKEN}`,
+      Authorization: `Bearer ${token}`,
       "X-GitHub-Api-Version": "2022-11-28",
       "User-Agent": "amnecorda-admin",
       ...(options.body ? { "Content-Type": "application/json" } : {}),
