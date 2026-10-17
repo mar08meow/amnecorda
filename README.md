@@ -139,16 +139,17 @@ Cloudflare Pages 会自动重新部署，通常一两分钟生效。
 
 如果暂时不想连接 GitHub，也可以在 Pages 中选择 **Upload assets**，上传 `D:\AI\workspace\amnecorda-site.zip`。每次更新都需要重新生成并上传一次。
 
-## 配置 hello@amnecorda.com
+## hello@amnecorda.com 邮件路由（已配置）
 
-免费方案（只收信、转发）：
+当前配置：
 
-1. Cloudflare Dashboard → 选择 `amnecorda.com` → **Email → Email Routing**。
-2. 点击 **Enable Email Routing**，按提示添加 MX / TXT 记录。
-3. 在 **Destination addresses** 添加你的常用邮箱，并到该邮箱点击验证链接。
-4. 在 **Custom addresses** 添加 `hello@amnecorda.com`，转发到刚才验证的邮箱。
+- 目标地址：`wen18792247083@gmail.com`（已验证）
+- 路由规则：`hello@amnecorda.com` → `wen18792247083@gmail.com`（活跃）
+- MX、SPF、DKIM 记录由 Cloudflare Email Routing 自动添加并锁定
 
-如果要能直接用该地址发信，需要 Google Workspace、Fastmail、Zoho Mail 等邮箱服务，并按服务商提供的 MX 记录配置。注意：更换邮件服务会覆盖 Cloudflare Email Routing 的 MX 记录。
+测试方式：从其他邮箱发送一封邮件到 `hello@amnecorda.com`，确认 Gmail 能收到（也检查一下垃圾邮件箱）。
+
+如果要能直接用这个地址发信，需要 Google Workspace、Fastmail、Zoho Mail 等邮箱服务，并按服务商提供的 MX 记录配置。注意：更换邮件服务会覆盖 Cloudflare Email Routing 的 MX 记录。
 
 ## 说明
 
