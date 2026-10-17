@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>为什么你的设计系统，总在第三个月崩塌 — AMNE CORDA</title>
+  <meta name="description" content="不是组件不够多，而是决策没有留下痕迹。一次关于 token、治理与「谁来拍板」的复盘。">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body id="top">
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="../index.html" aria-label="AMNE CORDA 首页">AMNE<br>CORDA<span class="brand-dot" aria-hidden="true"></span></a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="../index.html">Home</a>
+        <a href="../writing.html">Writing</a>
+        <a href="../projects.html">Projects</a>
+        <a href="../about.html">About</a>
+      </nav>
+      <div class="nav-right">
+        <span class="nav-clock" data-clock>--:-- CST</span>
+        <a class="nav-mail" href="mailto:hello@amnecorda.com">Say hello <span class="arrow" aria-hidden="true">↗</span></a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="打开菜单">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="progress" data-progress aria-hidden="true"></div>
+
+  <main id="main">
+    <article>
+      <header class="article-head container">
+        <nav class="breadcrumb" aria-label="面包屑">
+          <a href="../index.html">Home</a>
+          <span class="slash" aria-hidden="true">/</span>
+          <a href="../writing.html">Writing</a>
+          <span class="slash" aria-hidden="true">/</span>
+          <span>Design Systems</span>
+        </nav>
+        <div class="article-meta">
+          <span class="cat">Design Systems</span>
+          <span class="sep" aria-hidden="true"></span>
+          <span>2026.09.18</span>
+          <span class="sep" aria-hidden="true"></span>
+          <span>12 min read</span>
+        </div>
+        <h1 class="article-title">为什么你的设计系统，<br>总在第三个月崩塌</h1>
+        <p class="article-deck">不是组件不够多，而是决策没有留下痕迹。一次关于 token、治理与「谁来拍板」的复盘。</p>
+        <div class="article-byline">
+          <span>文 / AmneCorda</span>
+          <span class="byline-line" aria-hidden="true"></span>
+          <span>Hangzhou</span>
+        </div>
+      </header>
+
+      <div class="container article-body">
+        <div class="prose">
+          <p class="lead">每个设计系统的开头都差不多：几个人坐在一起，拉出一份颜色与字号的清单，建一个 Figma 库，再开一个组件仓库。前两个月一切顺利。第三个月开始，有人绕过它做需求；第四个月，它变成了「那个旧库」。</p>
+
+          <p>我参与过三次这样的重建。第一次以为是组件覆盖率不够，第二次以为是文档写得不好，第三次才慢慢看清：崩塌的从来不是组件，而是围绕组件做出决策的那套关系。</p>
+
+          <h2 id="s1">崩塌通常不是技术问题</h2>
+          <p>最典型的一次，是按钮组件缺一个「次要危险」状态。设计师在 Figma 里画了一个新样式，前端在业务代码里写了两行覆盖。两周后，另一个页面也遇到同样的需求，又复制了一遍。三个月后，仓库里出现了七种红色按钮。</p>
+          <p>表面上看，是组件不够用。真正的问题是：没有人知道该找谁加这个状态，也没有人知道加了之后会不会破坏别的页面。于是绕过系统，成了当时最理性的选择。</p>
+          <blockquote>
+            <p>组件库的敌人从来不是需求变化，而是模糊的所有权。</p>
+            <cite>一次内部复盘的结论</cite>
+          </blockquote>
+          <p>当「谁能改」和「改了谁负责」都不清楚时，系统就不再是一个可以依赖的契约，而只是一份可选的参考实现。</p>
+
+          <h2 id="s2">组件是结果，决策才是资产</h2>
+          <p>一个按钮的圆角是 4px 还是 6px，本身并不重要。重要的是为什么选它，以及在什么情况下可以偏离。设计系统真正保存的，不是那几十个组件，而是一连串被明确过的判断：</p>
+          <ul>
+            <li>为什么全局只有一个强调色，而不是每个业务线一个；</li>
+            <li>为什么表单控件不提供「超大号」，即使某个页面确实想要；</li>
+            <li>为什么空状态必须包含下一步动作，而不能只放一张插画；</li>
+            <li>为什么危险操作永远需要二次确认，即使它看起来很明显。</li>
+          </ul>
+          <p>这些规则如果没有被写下来，下一次讨论就会从头再来。而每一次从头再来，都会消耗掉一点团队对系统的信任。</p>
+
+          <h2 id="s3">给决策留下位置</h2>
+          <p>我们的做法很朴素：给每个 token 和关键组件建一份「决策记录」。不用很长，三句话就够——它解决什么问题、为什么不是另一种方案、什么时候应该重新考虑。</p>
+          <p>代码本身也可以承担一部分记录的责任：</p>
+          <pre><code><span class="c">/* tokens/color.css */</span>
+<span class="k">:root</span> {
+  <span class="c">/* 强调色只用于「需要被看见的动作」，
+     不用于装饰，也不用于品牌表达。 */</span>
+  <span class="k">--accent</span>: #9d3f2b;
+
+  <span class="c">/* 文本层级只有三级。
+     如果需要第四级，先检查信息架构。 */</span>
+  <span class="k">--ink</span>: #1a1917;
+  <span class="k">--ink-soft</span>: #5b564d;
+  <span class="k">--muted</span>: #8a8377;
+}</code></pre>
+          <p>注释不是文档的全部，但它是离代码最近的那一部分。一个新人改到这里时，会先看到这句话，再决定要不要加第四级灰色。</p>
+          <p>另一个变化，是把「发起变更」的成本降下来。我们设了一个每周三下午的 30 分钟窗口，任何人都可以带着一个具体问题来。能当场决定的就当场决定，不能决定的明确告诉对方：谁在什么时候给答复。听起来很轻，但它把大量私下绕过系统的行为，重新拉回了桌面上。</p>
+
+          <h2 id="s4">三个月检查清单</h2>
+          <p>如果你的系统正在第三个月附近，可以问自己四个问题：</p>
+          <ol>
+            <li>新同事能在 30 分钟内搞清楚，一个组件为什么长这样吗？</li>
+            <li>最近一次绕过系统，是因为缺少能力，还是因为流程太慢？</li>
+            <li>token 的命名描述的是外观，还是用途？</li>
+            <li>谁有权说「不」？这个人在不在讨论现场？</li>
+          </ol>
+          <p>四个问题里如果有两个答不上来，问题大概率不在组件数量上。先别急着加新组件，去把决策的路径补上。</p>
+
+          <h2 id="s5">系统也需要被维护关系</h2>
+          <p>后来我不再把设计系统当成一个交付物。它更像一段需要持续维护的关系：有人提出需求，有人做出判断，有人记录原因，也有人定期回来看看那些判断是否仍然成立。</p>
+          <p>组件会过时，token 会改名，工具会换。但只要「为什么」还留在原地，下一个人就能接着往前走，而不是从废墟里重新开始。</p>
+          <p>三个月不是诅咒。它只是一个提醒：如果你只建了组件，没有建那条做决定的路径，那么第三个月发生的事，其实在第一个月就已经写好了。</p>
+
+          <p class="end-mark" aria-hidden="true">· · ·</p>
+
+          <div class="article-end">
+            <span>写于 2026 年 9 月</span>
+            <a href="../writing.html">返回全部文章 ↑</a>
+          </div>
+        </div>
+
+        <aside class="toc" aria-label="本文目录">
+          <p class="toc-label">Contents</p>
+          <ol>
+            <li><a href="#s1">崩塌通常不是技术问题</a></li>
+            <li><a href="#s2">组件是结果，决策才是资产</a></li>
+            <li><a href="#s3">给决策留下位置</a></li>
+            <li><a href="#s4">三个月检查清单</a></li>
+            <li><a href="#s5">系统也需要被维护关系</a></li>
+          </ol>
+          <a class="toc-back" href="../writing.html">← All entries</a>
+        </aside>
+      </div>
+    </article>
+
+    <a class="next-post container" href="state-as-essay.html">
+      <p class="next-label">Next entry</p>
+      <h2 class="next-title">把状态管理写成一篇散文 <span class="next-arrow" aria-hidden="true">↗</span></h2>
+    </a>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <p class="footer-label">Sitemap</p>
+          <nav class="footer-nav" aria-label="页脚导航">
+            <a href="../index.html">Home / 首页</a>
+            <a href="../writing.html">Writing / 文章</a>
+            <a href="../projects.html">Projects / 项目</a>
+            <a href="../about.html">About / 关于</a>
+          </nav>
+        </div>
+        <div>
+          <p class="footer-label">Elsewhere</p>
+          <nav class="footer-nav" aria-label="社交链接">
+            <a href="https://github.com/mar08meow" target="_blank" rel="noopener noreferrer">GitHub <span class="arrow" aria-hidden="true">↗</span></a>
+            <a href="https://x.com/Amnecorda" target="_blank" rel="noopener noreferrer">X / Twitter <span class="arrow" aria-hidden="true">↗</span></a>
+            <a href="mailto:hello@amnecorda.com">Email <span class="arrow" aria-hidden="true">↗</span></a>
+          </nav>
+        </div>
+        <div class="footer-col--note">
+          <p class="footer-label">Colophon</p>
+          <p>手写 HTML 与 CSS 搭建，未使用框架。字体为 Inter，中文回退至系统中无衬线字体。站点不加载追踪脚本。</p>
+        </div>
+      </div>
+      <p class="footer-mark" aria-hidden="true">AMNE<br>CORDA<span class="mark-dot">.</span></p>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> AmneCorda</span>
+        <span>Made slowly · <span data-clock>--:-- CST</span></span>
+        <a href="#top" class="back-top">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <div class="mobile-menu-top">
+      <a class="brand" href="../index.html">AMNE<br>CORDA<span class="brand-dot" aria-hidden="true"></span></a>
+      <button class="menu-close" type="button" aria-label="关闭菜单"><span></span><span></span></button>
+    </div>
+    <nav class="mobile-nav" aria-label="移动端导航">
+      <a href="../index.html"><span>01</span>首页 / Home</a>
+      <a href="../writing.html"><span>02</span>文章 / Writing</a>
+      <a href="../projects.html"><span>03</span>项目 / Projects</a>
+      <a href="../about.html"><span>04</span>关于 / About</a>
+    </nav>
+    <div class="mobile-menu-foot">
+      <a href="mailto:hello@amnecorda.com">hello@amnecorda.com</a>
+      <p>Hangzhou · CST</p>
+    </div>
+  </div>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

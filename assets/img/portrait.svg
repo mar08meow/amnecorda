@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1125" role="img" aria-label="白底上以大写字母 A 构成的排版式肖像">
+  <rect width="900" height="1125" fill="#ffffff"/>
+  <g stroke="#0a0a0a" stroke-width="1" opacity="0.06">
+    <path d="M0 225h900M0 450h900M0 675h900M0 900h900"/>
+    <path d="M150 0v1125M300 0v1125M450 0v1125M600 0v1125M750 0v1125"/>
+  </g>
+  <text x="450" y="720" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-weight="800" font-size="620" letter-spacing="-30" fill="#0a0a0a">A</text>
+  <circle cx="690" cy="300" r="11" fill="#0a0a0a"/>
+  <path d="M90 1000h170" stroke="#0a0a0a" stroke-width="2"/>
+  <text x="90" y="96" font-family="monospace" font-size="15" letter-spacing="4" fill="#8a8a8a">FIG. 01 — PORTRAIT</text>
+  <text x="90" y="1052" font-family="monospace" font-size="15" letter-spacing="3" fill="#8a8a8a">AMNECORDA / 2026</text>
+  <text x="810" y="1052" font-family="monospace" font-size="15" letter-spacing="3" fill="#8a8a8a" text-anchor="end">HANGZHOU</text>
+</svg>
