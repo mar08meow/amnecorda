@@ -43,7 +43,7 @@
       <p class="eyebrow">Projects / 作品</p>
       <h1 class="page-title">做过一些<br>具体的东西。</h1>
       <div class="page-intro">
-        <p>从设计系统到每天会用的小工具。AppPantry 可以直接下载；其余项目记录它们留下的判断，而不只是功能列表。</p>
+        <p>从设计系统到每天会用的小工具。AppPantry 的下载按钮会自动读取 GitHub 最新 Release；如果接口不可用，会保留 v1.0.0 的静态链接作为回退。以后发新版本不需要改页面。</p>
         <span class="page-count">05 SELECTED / 2022—2026</span>
       </div>
     </header>
@@ -54,15 +54,15 @@
           <div>
             <div class="project-head">
               <h2 class="project-title">AppPantry</h2>
-              <span class="project-year">2026 · v1.0.0</span>
+              <span class="project-year">2026 · <span data-appantry-version aria-live="polite">v1.0.0</span></span>
             </div>
             <p class="project-desc">本地优先的 Windows 应用下载、安装与管理工具。内置 154 款精选应用，支持 winget 一键安装、软件卸载与残留清理、图片/PDF 本地转换，以及中英文界面和深浅色主题。不需要账号，文件不离开电脑。</p>
             <div class="project-actions">
-              <a class="button" href="https://github.com/mar08meow/AppPantry/releases/download/v1.0.0/AppPantry-1.0.0-portable.exe" target="_blank" rel="noopener noreferrer">下载便携版</a>
-              <a class="button button--ghost" href="https://github.com/mar08meow/AppPantry/releases/download/v1.0.0/AppPantry-1.0.0-setup.exe" target="_blank" rel="noopener noreferrer">下载安装版</a>
+              <a class="button" href="https://github.com/mar08meow/AppPantry/releases/download/v1.0.0/AppPantry-1.0.0-portable.exe" data-appantry-download="portable" target="_blank" rel="noopener noreferrer">下载便携版</a>
+              <a class="button button--ghost" href="https://github.com/mar08meow/AppPantry/releases/download/v1.0.0/AppPantry-1.0.0-setup.exe" data-appantry-download="setup" target="_blank" rel="noopener noreferrer">下载安装版</a>
               <a class="text-link" href="https://github.com/mar08meow/AppPantry" target="_blank" rel="noopener noreferrer">GitHub <span class="arrow" aria-hidden="true">↗</span></a>
             </div>
-            <p class="project-meta">Windows 10/11 · 约 100 MB · <a href="https://github.com/mar08meow/AppPantry/releases/tag/v1.0.0" target="_blank" rel="noopener noreferrer">Release notes ↗</a></p>
+            <p class="project-meta">Windows 10/11 · 约 100 MB · <a href="https://github.com/mar08meow/AppPantry/releases/tag/v1.0.0" data-appantry-release target="_blank" rel="noopener noreferrer">Release notes ↗</a></p>
           </div>
           <ul class="project-tags">
             <li>Local-first</li>
@@ -196,6 +196,7 @@
     </div>
   </div>
 
+  <script src="assets/js/releases.js?v=1"></script>
   <script src="assets/js/main.js?v=rssbtn1"></script>
 </body>
 </html>
