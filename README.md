@@ -30,6 +30,14 @@
 - 安全：`/api/admin/*` 会校验 `Cf-Access-Jwt-Assertion`，即使直接访问 `pages.dev` 的 API 也会被拒绝
 - 发布/删除会创建一次 GitHub commit，Cloudflare 会自动部署
 
+### 当前配置
+
+- Access 应用：`AMNE CORDA Admin`（路径 `/admin`）与 `AMNE CORDA Admin API`（路径 `/api/admin`）
+- 策略：`Owner only`，只允许 `wen18792247083@gmail.com`
+- 登录方式：Cloudflare Access 登录页中的 “Sign in with Cloudflare”
+- Pages 环境变量：`GITHUB_TOKEN`（Secret）、`ACCESS_TEAM_DOMAIN`、`ACCESS_AUD`
+- GitHub Token 只授权 `amnecorda`，权限为 `Contents: Read and write`，有效期 90 天
+
 ### 一次性配置
 
 1. **创建 GitHub Fine-grained Token**：只授权 `amnecorda`，权限 `Contents: Read and write`，有效期建议 90 天。
