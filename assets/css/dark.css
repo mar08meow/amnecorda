@@ -1,0 +1,93 @@
+/* AMNE CORDA — automatic night mode.
+   Follows the device/browser prefers-color-scheme setting.
+   Loaded after theme.css; only overrides colors, not fonts or sizes. */
+
+html {
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+
+  :root {
+    --paper: #0d0d0d;
+    --paper-2: #171717;
+    --paper-3: #222222;
+    --ink: #f1f1f1;
+    --ink-2: #d8d8d8;
+    --ink-soft: #b0b0b0;
+    --muted: #8a8a8a;
+    --line: rgba(241, 241, 241, 0.18);
+    --line-soft: rgba(241, 241, 241, 0.09);
+    --accent: #f1f1f1;
+    --accent-deep: #ffffff;
+    --accent-soft: #9a9a9a;
+  }
+
+  .site-header {
+    background: var(--paper);
+  }
+
+  .mobile-menu {
+    background: #080808;
+    color: var(--ink);
+  }
+
+  .mobile-menu .brand,
+  .mobile-nav a,
+  .mobile-menu-foot a {
+    color: var(--ink);
+  }
+
+  .mobile-menu-top,
+  .mobile-menu-foot {
+    border-color: var(--line);
+  }
+
+  .mobile-nav a {
+    border-bottom-color: var(--line);
+  }
+
+  .mobile-menu-foot {
+    color: var(--muted);
+  }
+
+  .menu-close span {
+    background: var(--ink);
+  }
+
+  .statement {
+    background: #171717;
+    color: var(--ink);
+  }
+
+  .statement::before {
+    color: rgba(241, 241, 241, 0.04);
+  }
+
+  .statement-kicker,
+  .statement-by {
+    color: var(--muted);
+  }
+
+  .statement-en {
+    color: var(--ink-soft);
+  }
+
+  .statement-foot {
+    border-top-color: var(--line);
+  }
+
+  .prose pre {
+    background: #080808;
+    color: #e9e2d3;
+  }
+}
+
+@media (prefers-color-scheme: dark) and (max-width: 880px) {
+  .site-header {
+    background: rgba(13, 13, 13, 0.94);
+  }
+}

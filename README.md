@@ -88,6 +88,8 @@
 
 保存后会写入 `assets/css/theme.css`，创建一次 GitHub commit，Cloudflare 部署后全站生效。想恢复原始黑白，点「恢复默认」再保存。也可以直接在「站点文件」里编辑 `assets/css/theme.css`。
 
+夜间模式由 `assets/css/dark.css` 自动跟随手机/系统的深浅色设置，只覆盖颜色，不会改变这里设置的字体和字号。
+
 ## 文件结构
 
 ```
@@ -111,6 +113,7 @@ personal-blog/
 ├─ assets/
 │  ├─ css/main.css            站点默认样式（设计变量在 :root）
 │  ├─ css/theme.css           后台「外观」生成的变量覆盖
+│  ├─ css/dark.css            夜间模式（自动跟随系统）
 │  ├─ css/admin.css           管理后台样式
 │  ├─ js/main.js              菜单、动态列表、筛选、进度、目录高亮
 │  ├─ js/admin.js             Access 后台、发布/删除、文件编辑、外观

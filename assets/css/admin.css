@@ -606,6 +606,16 @@ textarea {
   align-items: start;
 }
 
+.theme-note {
+  margin: 0 0 18px;
+  padding: 10px 12px;
+  border-left: 2px solid var(--line);
+  background: var(--paper-2);
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--soft);
+}
+
 .theme-controls {
   display: grid;
   gap: 0;
