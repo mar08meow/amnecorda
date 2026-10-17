@@ -349,6 +349,13 @@
     searchButton.innerHTML = 'Search <kbd>/</kbd>';
     navRight.insertBefore(searchButton, navRight.firstChild);
 
+    const rssButton = document.createElement("a");
+    rssButton.className = "nav-rss";
+    rssButton.href = `${rootPrefix}feed.xml`;
+    rssButton.setAttribute("aria-label", "RSS 订阅");
+    rssButton.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="19" r="2.2" fill="currentColor"></circle><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg><span class="nav-rss-label">RSS</span>`;
+    navRight.insertBefore(rssButton, searchButton.nextSibling);
+
     const dialog = document.createElement("dialog");
     dialog.className = "search-dialog";
     dialog.innerHTML = `

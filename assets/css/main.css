@@ -326,6 +326,30 @@ a:hover .arrow {
   color: var(--ink);
 }
 
+.nav-rss {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-rss svg {
+  display: block;
+  width: 12px;
+  height: 12px;
+}
+
+.nav-rss:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
 .nav-search kbd {
   padding: 1px 4px;
   border: 1px solid var(--line);
@@ -2721,13 +2745,29 @@ body,
   }
 }
 
+@media (max-width: 860px) {
+  .nav-search {
+    margin-right: 10px;
+  }
+
+  .nav-rss {
+    margin-right: 8px;
+  }
+}
+
 @media (max-width: 680px) {
   .nav-search {
     margin-right: 10px;
   }
 
-  .nav-search kbd {
+  .nav-search kbd,
+  .nav-rss-label {
     display: none;
+  }
+
+  .nav-rss {
+    padding: 6px;
+    margin-right: 8px;
   }
 
   .search-dialog {
