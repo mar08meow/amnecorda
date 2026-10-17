@@ -25,8 +25,8 @@
   };
   const THEME_DEFAULTS = {
     paper: "#ffffff",
-    ink: "#0a0a0a",
-    accent: "#0a0a0a",
+    ink: "#0b1220",
+    accent: "#1d4ed8",
     sans: "inter",
     display: "inter",
     reading: "inter",

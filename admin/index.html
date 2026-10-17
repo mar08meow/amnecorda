@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/admin.css?v=rss1">
+  <link rel="stylesheet" href="/assets/css/admin.css?v=simple1">
 </head>
 <body>
   <header class="admin-top">
@@ -25,7 +25,7 @@
       <div class="login-card">
         <p class="admin-kicker">Admin / 管理后台</p>
         <h1 id="access-title">正在检查登录状态…</h1>
-        <p class="admin-muted" id="access-message">本页面由 Cloudflare Access 保护。发布、删除文章会通过服务端 API 提交到 GitHub，浏览器中不再保存 GitHub Token。</p>
+        <p class="admin-muted" id="access-message">本页面由 Cloudflare Access 保护。你可以编辑站点文件与外观；修改会通过服务端 API 提交到 GitHub。</p>
         <p class="status" id="access-error" role="alert"></p>
         <div class="form-actions">
           <a class="btn btn-primary" href="/admin/">重新检查</a>
@@ -44,13 +44,11 @@
       </div>
 
       <nav class="admin-tabs" aria-label="管理功能">
-        <button type="button" data-tab="posts" class="is-active">文章</button>
-        <button type="button" data-tab="new">写新文章</button>
-        <button type="button" data-tab="files">站点文件</button>
+        <button type="button" data-tab="files" class="is-active">站点文件</button>
         <button type="button" data-tab="appearance">外观</button>
       </nav>
 
-      <section class="admin-panel" id="panel-posts">
+      <section class="admin-panel" id="panel-posts" hidden>
         <div class="panel-head">
           <h2>已发布文章</h2>
           <button class="btn btn-ghost" type="button" id="refresh-posts">刷新</button>
@@ -133,7 +131,7 @@
         </div>
       </section>
 
-      <section class="admin-panel" id="panel-files" hidden>
+      <section class="admin-panel" id="panel-files">
         <div class="panel-head">
           <h2>站点文件</h2>
           <span class="repo-line">高级操作 · 保存后自动部署</span>
@@ -142,15 +140,13 @@
         <div class="file-row">
           <select id="file-select" aria-label="选择文件">
             <option value="index.html">index.html</option>
-            <option value="about.html">about.html</option>
-            <option value="projects.html">projects.html</option>
-            <option value="writing.html">writing.html</option>
+            <option value="404.html">404.html</option>
             <option value="assets/css/main.css">assets/css/main.css</option>
             <option value="assets/css/theme.css">assets/css/theme.css</option>
             <option value="assets/css/dark.css">assets/css/dark.css</option>
-            <option value="feed.xml">feed.xml</option>
             <option value="_headers">_headers</option>
             <option value="robots.txt">robots.txt</option>
+            <option value="sitemap.xml">sitemap.xml</option>
           </select>
           <button class="btn btn-ghost" type="button" id="load-file">读取</button>
           <button class="btn btn-ghost" type="button" id="download-file">下载备份</button>
@@ -255,7 +251,7 @@
             <div class="theme-group">
               <h3>预设</h3>
               <div class="theme-presets">
-                <button type="button" class="theme-preset" data-preset="mono">黑白极简</button>
+                <button type="button" class="theme-preset" data-preset="mono">蓝白极简</button>
                 <button type="button" class="theme-preset" data-preset="warm">暖纸</button>
                 <button type="button" class="theme-preset" data-preset="cool">冷灰</button>
                 <button type="button" class="theme-preset" data-preset="night">深夜</button>
@@ -286,6 +282,6 @@
     </section>
   </main>
 
-  <script src="/assets/js/admin.js?v=article1"></script>
+  <script src="/assets/js/admin.js?v=simple1"></script>
 </body>
 </html>

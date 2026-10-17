@@ -4,20 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0d0d0d" media="(prefers-color-scheme: dark)">
-  <title>AMNE CORDA — 你好，我是 AmneCorda</title>
-  <meta name="description" content="AmneCorda 的个人主页。产品工程师，关注设计系统、界面与工作方式。">
-  <meta property="og:title" content="AMNE CORDA — AmneCorda">
-  <meta property="og:description" content="产品工程师，关注设计系统、界面与工作方式。">
+  <meta name="theme-color" content="#08111f" media="(prefers-color-scheme: dark)">
+  <title>AMNE CORDA — 个人主页</title>
+  <meta name="description" content="AmneCorda 的个人主页。一个普通人，喜欢折腾 Windows 和 Android 小工具。">
+  <meta property="og:title" content="AMNE CORDA — 个人主页">
+  <meta property="og:description" content="一个普通人，喜欢折腾 Windows 和 Android 小工具。">
   <meta property="og:type" content="website">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/main.css?v=appantry1">
-  <link rel="stylesheet" href="assets/css/theme.css">
-  <link rel="stylesheet" href="assets/css/dark.css">
-  <link rel="alternate" type="application/rss+xml" title="AMNE CORDA" href="feed.xml">
+  <link rel="stylesheet" href="assets/css/main.css?v=blue1">
+  <link rel="stylesheet" href="assets/css/theme.css?v=blue1">
+  <link rel="stylesheet" href="assets/css/dark.css?v=blue1">
 </head>
 <body id="top">
   <a class="skip-link" href="#main">跳到正文</a>
@@ -26,10 +25,9 @@
     <div class="container nav">
       <a class="brand" href="index.html" aria-label="AMNE CORDA 首页">AMNE<br>CORDA<span class="brand-dot" aria-hidden="true"></span></a>
       <nav class="nav-links" aria-label="主导航">
-        <a href="index.html" aria-current="page">Home</a>
-        <a href="writing.html">Writing</a>
-        <a href="projects.html">Projects</a>
-        <a href="about.html">About</a>
+        <a href="#top" aria-current="page">Home</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
       </nav>
       <div class="nav-right">
         <span class="nav-clock" data-clock>--:-- CST</span>
@@ -44,86 +42,88 @@
   <main id="main">
     <section class="hero container" aria-labelledby="hero-title">
       <div class="hero-top">
-        <p class="eyebrow">Personal homepage / 个人主页</p>
-        <p class="issue">HANGZHOU, CN / EST. 2025</p>
+        <p class="eyebrow">Personal page / 个人主页</p>
+        <p class="issue">A SMALL PLACE ON THE INTERNET</p>
       </div>
       <h1 class="hero-title" id="hero-title">
         <span class="hero-line"><span>你好，我是</span></span>
         <span class="hero-line hero-line--2"><span><em>AmneCorda</em>。</span></span>
       </h1>
-      <p class="hero-role">Product Engineer · Design Systems · Writing</p>
+      <p class="hero-role">一个普通人 · 喜欢折腾小工具</p>
       <div class="hero-foot">
-        <p class="hero-intro">我在代码与设计之间来回走动，关心系统如何生长、界面如何说话，以及工具如何改变人的注意力。这里是我公开的笔记本，也是我愿意长期维护的一小块地方。</p>
+        <p class="hero-intro">这里是我的个人主页，不是博客。没有课程、没有简历式的项目清单，只有一点关于我的介绍，和我做过的几个小东西。</p>
         <div class="hero-side">
-          <p class="hero-status"><span class="status-dot" aria-hidden="true"></span>Available for remote work</p>
+          <p class="hero-status"><span class="status-dot" aria-hidden="true"></span>Just say hi</p>
           <div class="hero-actions">
-            <a class="button" href="writing.html">Read writing <span class="arrow" aria-hidden="true">↗</span></a>
-            <a class="button button--ghost" href="https://github.com/mar08meow" target="_blank" rel="noopener noreferrer">GitHub <span class="arrow" aria-hidden="true">↗</span></a>
+            <a class="button" href="https://github.com/mar08meow" target="_blank" rel="noopener noreferrer">GitHub <span class="arrow" aria-hidden="true">↗</span></a>
+            <a class="button button--ghost" href="#projects">AppPantry <span class="arrow" aria-hidden="true">↓</span></a>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="profile-section reveal" aria-labelledby="i-am">
+    <section class="profile-section reveal" id="about" aria-labelledby="about-title">
       <div class="container profile-grid">
-        <h2 id="i-am">I am</h2>
-        <div class="profile-copy">
-          <p>现在在一家 SaaS 公司维护设计系统与前端基础设施。每天的工作，是把散落在各个页面里的决定，收拢成一套别人可以放心使用的规则。</p>
-          <p>做过复杂的企业后台，也做过只有三个页面的小工具；带过团队，也一个人从设计稿写到部署脚本。越来越确信：好的产品不是功能堆出来的，而是由一连串克制的决定长出来的。</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="profile-section reveal" aria-labelledby="about-me">
-      <div class="container profile-grid">
-        <h2 id="about-me">About me</h2>
+        <h2 id="about-title">About me</h2>
         <div>
-          <p>我是 AmneCorda，一名产品工程师。白天写 TypeScript，晚上读一点书，把白天没想明白的事情写下来。这个博客是我留给自己的长期笔记本，也是我愿意公开的那一部分。</p>
-          <p>这里没有算法推荐，也不加载追踪脚本。我写得慢，但希望每篇都能放上三个月再读一遍。</p>
-          <a class="text-link" href="about.html">更完整的自述 <span class="arrow" aria-hidden="true">↗</span></a>
+          <p>我是 AmneCorda，一个普通人。平时喜欢折腾 Windows 和 Android 上的小工具，遇到顺手的问题就自己写一个。</p>
+          <p>我不太擅长把自己包装成某种 title。这个页面只是留一个简单的介绍，和几个可以找到我的地方。</p>
         </div>
       </div>
     </section>
 
-    <section class="profile-section reveal" aria-labelledby="selected-writing">
+    <section class="profile-section reveal" id="projects" aria-labelledby="projects-title">
       <div class="container profile-grid">
-        <h2 id="selected-writing">Selected writing</h2>
+        <h2 id="projects-title">Things I made</h2>
         <div>
-          <ul class="mini-list" data-featured-list>
-            <li>
-              <a href="posts/design-systems-collapse.html">为什么你的设计系统，总在第三个月崩塌</a>
-              <span class="mini-meta">Design Systems · 2026</span>
-            </li>
-            <li>
-              <a href="posts/state-as-essay.html">把状态管理写成一篇散文</a>
-              <span class="mini-meta">Engineering · 2026</span>
-            </li>
-            <li>
-              <a href="posts/whitespace-attention.html">留白是注意力的预算</a>
-              <span class="mini-meta">Design · 2026</span>
-            </li>
-          </ul>
-          <a class="text-link" href="writing.html">全部文章 <span class="arrow" aria-hidden="true">↗</span></a>
+          <div class="project-list">
+            <article class="project-item project-item--featured" id="appantry">
+              <div>
+                <div class="project-head">
+                  <h2 class="project-title">AppPantry</h2>
+                  <span class="project-year">Windows · <span data-appantry-version aria-live="polite">v1.0.0</span></span>
+                </div>
+                <p class="project-desc">一个本地优先的 Windows 应用下载、安装与管理工具。内置精选清单、winget 一键安装、卸载与残留清理、图片/PDF 本地转换。不需要账号，文件不离开电脑。</p>
+                <div class="project-actions">
+                  <a class="button" href="https://github.com/mar08meow/AppPantry/releases/download/v1.0.0/AppPantry-1.0.0-portable.exe" data-appantry-download="portable" target="_blank" rel="noopener noreferrer">下载便携版</a>
+                  <a class="button button--ghost" href="https://github.com/mar08meow/AppPantry/releases/download/v1.0.0/AppPantry-1.0.0-setup.exe" data-appantry-download="setup" target="_blank" rel="noopener noreferrer">下载安装版</a>
+                  <a class="text-link" href="https://github.com/mar08meow/AppPantry" target="_blank" rel="noopener noreferrer">GitHub <span class="arrow" aria-hidden="true">↗</span></a>
+                </div>
+                <p class="project-meta">Windows 10/11 · 约 100 MB · <a href="https://github.com/mar08meow/AppPantry/releases/tag/v1.0.0" data-appantry-release target="_blank" rel="noopener noreferrer">Release notes ↗</a></p>
+              </div>
+              <ul class="project-tags">
+                <li>Local-first</li>
+                <li>Electron</li>
+                <li>winget</li>
+              </ul>
+            </article>
+
+            <article class="project-item">
+              <div>
+                <div class="project-head">
+                  <h2 class="project-title">HyperOS Workbench Blur Fix</h2>
+                  <span class="project-year">Android · LSPosed</span>
+                </div>
+                <p class="project-desc">一个 LSPosed 模块，修复小米平板工作台模式应用列表背景不跟随第三方动态壁纸的问题。没有去修那张静态模糊图，而是让窗口自己的实时模糊露出来。</p>
+                <a class="text-link" href="https://github.com/mar08meow/HyperOS-Workbench-Blur-Fix" target="_blank" rel="noopener noreferrer">GitHub <span class="arrow" aria-hidden="true">↗</span></a>
+              </div>
+              <ul class="project-tags">
+                <li>Java</li>
+                <li>LSPosed</li>
+                <li>HyperOS</li>
+              </ul>
+            </article>
+          </div>
+          <p class="profile-note">没有更多了。以后做了新的小东西，会慢慢加在这里。</p>
         </div>
       </div>
     </section>
 
-    <section class="profile-section reveal" aria-labelledby="now">
+    <section class="profile-section reveal" id="contact" aria-labelledby="contact-title">
       <div class="container profile-grid">
-        <h2 id="now">Now</h2>
-        <div class="now-lines">
-          <p><span>正在做</span>设计系统 v3 的治理与文档，以及一个很小的本地写作工具。</p>
-          <p><span>正在读</span>《The Art of Doing Science and Engineering》，读得很慢。</p>
-          <p><span>正在学</span>排版：字距、栏宽、页边距。</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="profile-section reveal" aria-labelledby="find-me">
-      <div class="container profile-grid">
-        <h2 id="find-me">Find me at</h2>
+        <h2 id="contact-title">Find me at</h2>
         <div>
-          <p class="profile-note">如果你也在做类似的事情，或者只是想聊聊某个具体的问题，欢迎写信。</p>
+          <p class="profile-note">如果你也想聊聊 Windows、Android，或者只是路过，欢迎写信。</p>
           <div class="link-row">
             <a href="https://github.com/mar08meow" target="_blank" rel="noopener noreferrer">GitHub <span class="arrow" aria-hidden="true">↗</span></a>
             <a href="https://x.com/Amnecorda" target="_blank" rel="noopener noreferrer">X / Twitter <span class="arrow" aria-hidden="true">↗</span></a>
@@ -140,10 +140,9 @@
         <div>
           <p class="footer-label">Sitemap</p>
           <nav class="footer-nav" aria-label="页脚导航">
-            <a href="index.html">Home / 首页</a>
-            <a href="writing.html">Writing / 文章</a>
-            <a href="projects.html">Projects / 项目</a>
-            <a href="about.html">About / 关于</a>
+            <a href="#top">Home / 首页</a>
+            <a href="#projects">Projects / 小东西</a>
+            <a href="#contact">Contact / 联系</a>
           </nav>
         </div>
         <div>
@@ -156,7 +155,7 @@
         </div>
         <div class="footer-col--note">
           <p class="footer-label">Colophon</p>
-          <p>手写 HTML 与 CSS 搭建，未使用框架。字体为 Inter，中文回退至系统中无衬线字体。站点不加载追踪脚本。</p>
+          <p>手写 HTML 与 CSS 搭建，未使用框架。字体为 Inter。站点不加载追踪脚本。</p>
         </div>
       </div>
       <p class="footer-mark" aria-hidden="true">AMNE<br>CORDA<span class="mark-dot">.</span></p>
@@ -174,17 +173,17 @@
       <button class="menu-close" type="button" aria-label="关闭菜单"><span></span><span></span></button>
     </div>
     <nav class="mobile-nav" aria-label="移动端导航">
-      <a href="index.html"><span>01</span>首页 / Home</a>
-      <a href="writing.html"><span>02</span>文章 / Writing</a>
-      <a href="projects.html"><span>03</span>项目 / Projects</a>
-      <a href="about.html"><span>04</span>关于 / About</a>
+      <a href="#top"><span>01</span>首页 / Home</a>
+      <a href="#projects"><span>02</span>小东西 / Projects</a>
+      <a href="#contact"><span>03</span>联系 / Contact</a>
     </nav>
     <div class="mobile-menu-foot">
       <a href="mailto:hello@amnecorda.com">hello@amnecorda.com</a>
-      <p>Hangzhou · CST</p>
+      <p>Personal page</p>
     </div>
   </div>
 
-  <script src="assets/js/main.js?v=rssbtn1"></script>
+  <script src="assets/js/releases.js?v=2"></script>
+  <script src="assets/js/main.js?v=blue1"></script>
 </body>
 </html>

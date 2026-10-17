@@ -4,6 +4,7 @@ const BRANCH = "main";
 
 const EXACT_PATHS = new Set([
   "index.html",
+  "404.html",
   "about.html",
   "projects.html",
   "writing.html",

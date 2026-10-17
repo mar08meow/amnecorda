@@ -12,18 +12,18 @@ html {
   }
 
   :root {
-    --paper: #0d0d0d;
-    --paper-2: #171717;
-    --paper-3: #222222;
-    --ink: #f1f1f1;
-    --ink-2: #d8d8d8;
-    --ink-soft: #b0b0b0;
-    --muted: #8a8a8a;
-    --line: rgba(241, 241, 241, 0.18);
-    --line-soft: rgba(241, 241, 241, 0.09);
-    --accent: #f1f1f1;
-    --accent-deep: #ffffff;
-    --accent-soft: #9a9a9a;
+    --paper: #08111f;
+    --paper-2: #0e1a2e;
+    --paper-3: #14233d;
+    --ink: #e8f0ff;
+    --ink-2: #cbd8f0;
+    --ink-soft: #a7b8d6;
+    --muted: #7c8ca8;
+    --line: rgba(147, 197, 253, 0.2);
+    --line-soft: rgba(147, 197, 253, 0.1);
+    --accent: #93c5fd;
+    --accent-deep: #dbeafe;
+    --accent-soft: #60a5fa;
   }
 
   .site-header {

@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0d0d0d" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#08111f" media="(prefers-color-scheme: dark)">
   <title>页面不存在 — AMNE CORDA</title>
+  <meta name="description" content="这一页不存在。返回 AMNE CORDA 个人主页。">
   <meta name="robots" content="noindex">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/main.css?v=appantry1">
-  <link rel="stylesheet" href="/assets/css/theme.css">
-  <link rel="stylesheet" href="/assets/css/dark.css">
-  <link rel="alternate" type="application/rss+xml" title="AMNE CORDA" href="/feed.xml">
+  <link rel="stylesheet" href="/assets/css/main.css?v=blue1">
+  <link rel="stylesheet" href="/assets/css/theme.css?v=blue1">
+  <link rel="stylesheet" href="/assets/css/dark.css?v=blue1">
 </head>
 <body id="top">
   <a class="skip-link" href="#main">跳到正文</a>
@@ -24,9 +24,8 @@
       <a class="brand" href="/" aria-label="AMNE CORDA 首页">AMNE<br>CORDA<span class="brand-dot" aria-hidden="true"></span></a>
       <nav class="nav-links" aria-label="主导航">
         <a href="/">Home</a>
-        <a href="/writing.html">Writing</a>
-        <a href="/projects.html">Projects</a>
-        <a href="/about.html">About</a>
+        <a href="/#projects">Projects</a>
+        <a href="/#contact">Contact</a>
       </nav>
       <div class="nav-right">
         <span class="nav-clock" data-clock>--:-- CST</span>
@@ -43,42 +42,53 @@
       <p class="eyebrow">Error / 404</p>
       <h1 class="page-title">这一页<br>不存在。</h1>
       <div class="page-intro">
-        <p>链接可能已经失效，或者地址输入有误。你可以回到首页，也可以去看看全部文章。</p>
-        <span class="page-count">NOT FOUND</span>
+        <p>链接可能已经失效，或者地址输入有误。你可以回首页，也可以去看看我做的小东西。</p>
       </div>
     </header>
 
-    <section class="section" aria-label="可选的去向">
-      <div class="container about-teaser">
-        <div class="about-copy">
-          <span class="section-index">→</span>
-          <h2>从这里继续。</h2>
-          <p>站点没有追踪脚本，也没有自动跳转。下面这些入口，应该足够你找回想看的东西。</p>
-          <a class="text-link" href="/">返回首页 <span class="arrow" aria-hidden="true">↗</span></a>
+    <section class="profile-section">
+      <div class="container profile-grid">
+        <h2>Go to</h2>
+        <div>
+          <div class="link-row">
+            <a href="/">Home <span class="arrow" aria-hidden="true">↗</span></a>
+            <a href="/#projects">Projects <span class="arrow" aria-hidden="true">↗</span></a>
+            <a href="https://github.com/mar08meow" target="_blank" rel="noopener noreferrer">GitHub <span class="arrow" aria-hidden="true">↗</span></a>
+            <a href="mailto:hello@amnecorda.com">Email <span class="arrow" aria-hidden="true">↗</span></a>
+          </div>
         </div>
-        <dl class="facts">
-          <div class="fact">
-            <dt>文章</dt>
-            <dd><a href="/writing.html">全部文章存档</a></dd>
-          </div>
-          <div class="fact">
-            <dt>关于</dt>
-            <dd><a href="/about.html">关于 AmneCorda</a></dd>
-          </div>
-          <div class="fact">
-            <dt>联系</dt>
-            <dd><a href="mailto:hello@amnecorda.com">hello@amnecorda.com</a></dd>
-          </div>
-        </dl>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container">
+      <div class="footer-top">
+        <div>
+          <p class="footer-label">Sitemap</p>
+          <nav class="footer-nav" aria-label="页脚导航">
+            <a href="/">Home / 首页</a>
+            <a href="/#projects">Projects / 小东西</a>
+            <a href="/#contact">Contact / 联系</a>
+          </nav>
+        </div>
+        <div>
+          <p class="footer-label">Elsewhere</p>
+          <nav class="footer-nav" aria-label="社交链接">
+            <a href="https://github.com/mar08meow" target="_blank" rel="noopener noreferrer">GitHub <span class="arrow" aria-hidden="true">↗</span></a>
+            <a href="https://x.com/Amnecorda" target="_blank" rel="noopener noreferrer">X / Twitter <span class="arrow" aria-hidden="true">↗</span></a>
+            <a href="mailto:hello@amnecorda.com">Email <span class="arrow" aria-hidden="true">↗</span></a>
+          </nav>
+        </div>
+        <div class="footer-col--note">
+          <p class="footer-label">Colophon</p>
+          <p>手写 HTML 与 CSS 搭建，未使用框架。字体为 Inter。站点不加载追踪脚本。</p>
+        </div>
+      </div>
+      <p class="footer-mark" aria-hidden="true">AMNE<br>CORDA<span class="mark-dot">.</span></p>
       <div class="footer-bottom">
         <span>© <span data-year>2026</span> AmneCorda</span>
-        <span>amnecorda.com</span>
+        <span>Made slowly · <span data-clock>--:-- CST</span></span>
         <a href="#top" class="back-top">Back to top ↑</a>
       </div>
     </div>
@@ -91,16 +101,15 @@
     </div>
     <nav class="mobile-nav" aria-label="移动端导航">
       <a href="/"><span>01</span>首页 / Home</a>
-      <a href="/writing.html"><span>02</span>文章 / Writing</a>
-      <a href="/projects.html"><span>03</span>项目 / Projects</a>
-      <a href="/about.html"><span>04</span>关于 / About</a>
+      <a href="/#projects"><span>02</span>小东西 / Projects</a>
+      <a href="/#contact"><span>03</span>联系 / Contact</a>
     </nav>
     <div class="mobile-menu-foot">
       <a href="mailto:hello@amnecorda.com">hello@amnecorda.com</a>
-      <p>Hangzhou · CST</p>
+      <p>Personal page</p>
     </div>
   </div>
 
-  <script src="/assets/js/main.js?v=rssbtn1"></script>
+  <script src="/assets/js/main.js?v=blue1"></script>
 </body>
 </html>

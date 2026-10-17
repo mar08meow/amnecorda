@@ -661,9 +661,10 @@ a:hover .arrow {
 
 .hero-title em {
   font-style: normal;
-  color: var(--paper);
-  background: var(--ink);
-  padding: 0.02em 0.07em;
+  color: var(--accent);
+  background: transparent;
+  padding: 0;
+  border-bottom: 0.07em solid var(--accent-soft);
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
@@ -2092,8 +2093,8 @@ a:hover .arrow {
   align-items: center;
   gap: 8px;
   padding: 11px 16px;
-  border: 1px solid var(--ink);
-  background: var(--ink);
+  border: 1px solid var(--accent);
+  background: var(--accent);
   color: var(--paper);
   font-size: 9.5px;
   font-weight: 600;
@@ -2104,17 +2105,18 @@ a:hover .arrow {
 
 .button:hover {
   background: transparent;
-  color: var(--ink);
+  color: var(--accent);
 }
 
 .button--ghost {
   border-color: var(--line);
   background: transparent;
-  color: var(--ink);
+  color: var(--accent);
 }
 
 .button--ghost:hover {
-  border-color: var(--ink);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .profile-section {
