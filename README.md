@@ -58,15 +58,14 @@ GitHub 仓库 `mar08meow/amnecorda` 已连接 Cloudflare Pages，`main` 分支�
 - 夜间模式在 `assets/css/dark.css`，跟随手机/系统的 `prefers-color-scheme`
 - 后台「外观」可以调整颜色、字体、字号、字重和预设；保存后写入 `theme.css` 并触发部署
 
-## AppPantry 下载按钮
+## 项目下载按钮
 
-`assets/js/releases.js` 会读取：
+`assets/js/releases.js` 会分别读取两个仓库的最新 Release：
 
-```
-https://api.github.com/repos/mar08meow/AppPantry/releases/latest
-```
+- `mar08meow/AppPantry`：匹配 `portable.exe` 与 `setup.exe`
+- `mar08meow/HyperOS-Workbench-Blur-Fix`：匹配 `.apk`
 
-自动把「下载便携版 / 下载安装版」指向最新 Release 中包含 `portable.exe` 和 `setup.exe` 的文件，并更新版本号与 Release notes 链接。接口失败时保留 v1.0.0 静态链接作为回退。
+它会自动更新版本号、下载链接和 Release notes；接口失败时保留当前静态链接作为回退。以后发布新版本，只要 Release 中的文件名仍然包含对应后缀，页面不需要修改。
 
 ## 部署
 
