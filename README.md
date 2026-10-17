@@ -75,7 +75,7 @@
 
 ### RSS 与站内搜索
 
-- RSS：`https://amnecorda.com/feed.xml`。页面 `<head>` 有自动发现链接，页脚也有 RSS 入口；后台发布/删除文章时会同时更新 `feed.xml`。
+- RSS：`https://amnecorda.com/feed.xml`。页面 `<head>` 有自动发现链接，页头有 RSS 按钮；后台发布/删除文章时会同时更新 `feed.xml`。
 - 搜索：页头 **Search** 按钮，或按 `/`、`Ctrl/Cmd + K` 打开。搜索基于 `data/posts.json`，匹配标题、摘要和分类，不需要后端。
 
 ### 站点文件
