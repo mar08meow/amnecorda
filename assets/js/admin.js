@@ -374,7 +374,7 @@
 
   /* --- Content editor ----------------------------------------------------- */
 
-  const CONTENT_PAGE = "index.html";
+  const CONTENT_PAGE = "mar08meow/index.html";
 
   const getFieldValue = (id) => {
     const field = $("#" + id);

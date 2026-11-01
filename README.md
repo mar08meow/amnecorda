@@ -1,14 +1,16 @@
 # AMNE CORDA — 个人主页
 
-极致简约个人主页：顶部联系方式、名字、四句话介绍。
+根路径为占位页，个人介绍位于 `/mar08meow/`。整站只保留几句自我介绍和联系方式。
 
-- 线上：`https://amnecorda.com`
+- 线上：`https://amnecorda.com`（占位页）
+- 个人主页：`https://amnecorda.com/mar08meow/`
 - 本地：`D:\AI\workspace\personal-blog`
 - GitHub：`https://github.com/mar08meow/amnecorda`
 
 ## 页面
 
-- **`index.html`**：极简个人主页
+- **`index.html`**：根路径占位页
+- **`mar08meow/index.html`**：极简个人主页
   - Hero：`Hello, I'm AmneCorda.`
   - 四句话介绍：我是谁、平时做什么、会什么、做东西的习惯
   - Contact：GitHub、X、Email
@@ -19,7 +21,8 @@
 
 ```
 personal-blog/
-├─ index.html                 单页个人介绍
+├─ index.html                 根路径占位页
+├─ mar08meow/index.html       极简个人主页
 ├─ 404.html                   404 页面
 ├─ admin/index.html           管理后台
 ├─ functions/
@@ -57,7 +60,7 @@ GitHub 仓库 `mar08meow/amnecorda` 已连接 Cloudflare Pages，`main` 分支�
 - About 两段文字
 - 联系区文字、GitHub / X / Email 链接
 
-保存后会重写 `index.html`、创建 GitHub commit，并自动触发 Cloudflare 部署。更复杂的结构再使用「站点文件」。
+保存后会重写 `mar08meow/index.html`、创建 GitHub commit，并自动触发 Cloudflare 部署。根路径占位页用「站点文件」编辑，更复杂的结构也使用「站点文件」。
 
 ## 外观
 
