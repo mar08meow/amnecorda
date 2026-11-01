@@ -1,6 +1,6 @@
 # AMNE CORDA — 个人主页
 
-蓝白个人主页：左侧固定导航、安静的排版、自我介绍和真实项目列表。不是产品落地页，也不是博客。
+极致简约个人主页：顶部联系方式、名字、四句话介绍。
 
 - 线上：`https://amnecorda.com`
 - 本地：`D:\AI\workspace\personal-blog`
@@ -8,12 +8,10 @@
 
 ## 页面
 
-- **`index.html`**：左侧导航个人主页
+- **`index.html`**：极简个人主页
   - Hero：`Hello, I'm AmneCorda.`
-  - I am：三句简短自述
-  - Things I made：AppPantry、HyperOS Workbench Blur Fix
-  - About me：一个普通人的简短自述
-  - Find me at：GitHub、X、Email
+  - 四句话介绍：我是谁、平时做什么、会什么、做东西的习惯
+  - Contact：GitHub、X、Email
 - **`404.html`**：精简错误页
 - **`admin/index.html`**：受 Cloudflare Access 保护的后台，包含「站点文件」「内容」「外观」
 
@@ -28,12 +26,10 @@ personal-blog/
 │  ├─ _lib/                   Access JWT、GitHub App token、GitHub API
 │  └─ admin/api/              me / file / commit API
 ├─ assets/
-│  ├─ css/main.css            个人主页布局、侧栏、项目列表与响应式
+│  ├─ css/main.css            极简布局与响应式
 │  ├─ css/theme.css           蓝白主题变量（后台可覆盖）
 │  ├─ css/dark.css            夜间模式（跟随系统）
 │  ├─ css/admin.css           后台样式
-│  ├─ js/main.js              侧栏导航、移动菜单、时钟、滚动淡入
-│  ├─ js/releases.js          AppPantry / HyperOS 最新 Release 下载按钮
 │  ├─ js/admin.js             后台文件编辑与外观面板
 │  └─ favicon.svg             蓝色 A 字标
 ├─ robots.txt
@@ -58,12 +54,10 @@ GitHub 仓库 `mar08meow/amnecorda` 已连接 Cloudflare Pages，`main` 分支�
 
 - 页面标题、SEO 描述
 - 首页名字、一句话介绍、介绍段落
-- About me 两段文字
+- About 两段文字
 - 联系区文字、GitHub / X / Email 链接
-- 项目的添加、删除和编辑：名称、平台/年份、描述、标签、GitHub 链接、Release 仓库、下载类型
-- AppPantry 与 HyperOS 的下载按钮会自动跟随各自最新 Release
 
-保存后会重写 `index.html`、创建 GitHub commit，并自动触发 Cloudflare 部署。新增或删除项目可以直接在「内容」页完成；更复杂的结构再使用「站点文件」。
+保存后会重写 `index.html`、创建 GitHub commit，并自动触发 Cloudflare 部署。更复杂的结构再使用「站点文件」。
 
 ## 外观
 
@@ -71,15 +65,6 @@ GitHub 仓库 `mar08meow/amnecorda` 已连接 Cloudflare Pages，`main` 分支�
 - 名字颜色来自 `.hero-title em { color: var(--accent); }`
 - 夜间模式在 `assets/css/dark.css`，跟随手机/系统的 `prefers-color-scheme`
 - 后台「外观」可以调整颜色、字体、字号、字重和预设；保存后写入 `theme.css` 并触发部署
-
-## 项目下载按钮
-
-`assets/js/releases.js` 会分别读取两个仓库的最新 Release：
-
-- `mar08meow/AppPantry`：匹配 `portable.exe` 与 `setup.exe`
-- `mar08meow/HyperOS-Workbench-Blur-Fix`：匹配 `.apk`
-
-它会自动更新版本号、下载链接和 Release notes；接口失败时保留当前静态链接作为回退。以后发布新版本，只要 Release 中的文件名仍然包含对应后缀，页面不需要修改。
 
 ## 部署
 
