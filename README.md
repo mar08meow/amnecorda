@@ -1,6 +1,6 @@
 # AMNE CORDA — 个人主页
 
-蓝白产品式单页个人介绍：大标题、滚动入场、动态光晕、AppPantry 产品窗口和项目卡片。没有博客、文章归档或虚构履历，只介绍我自己和做过的小工具。
+蓝白个人主页：左侧固定导航、安静的排版、自我介绍和真实项目列表。不是产品落地页，也不是博客。
 
 - 线上：`https://amnecorda.com`
 - 本地：`D:\AI\workspace\personal-blog`
@@ -8,12 +8,12 @@
 
 ## 页面
 
-- **`index.html`**：产品式单页个人介绍
-  - Hero：`把想法做成 AmneCorda 的小工具。`
-  - What I care about：本地优先、少依赖、长期维护
-  - Selected work：AppPantry、HyperOS Workbench Blur Fix
+- **`index.html`**：左侧导航个人主页
+  - Hero：`Hello, I'm AmneCorda.`
+  - I am：三句简短自述
+  - Things I made：AppPantry、HyperOS Workbench Blur Fix
   - About me：一个普通人的简短自述
-  - Contact：GitHub、X、Email
+  - Find me at：GitHub、X、Email
 - **`404.html`**：精简错误页
 - **`admin/index.html`**：受 Cloudflare Access 保护的后台，包含「站点文件」「内容」「外观」
 
@@ -28,11 +28,11 @@ personal-blog/
 │  ├─ _lib/                   Access JWT、GitHub App token、GitHub API
 │  └─ admin/api/              me / file / commit API
 ├─ assets/
-│  ├─ css/main.css            产品式布局、组件、动画与响应式
+│  ├─ css/main.css            个人主页布局、侧栏、项目列表与响应式
 │  ├─ css/theme.css           蓝白主题变量（后台可覆盖）
 │  ├─ css/dark.css            夜间模式（跟随系统）
 │  ├─ css/admin.css           后台样式
-│  ├─ js/main.js              菜单、时钟、滚动进度、入场动画、倾斜效果
+│  ├─ js/main.js              侧栏导航、移动菜单、时钟、滚动淡入
 │  ├─ js/releases.js          AppPantry / HyperOS 最新 Release 下载按钮
 │  ├─ js/admin.js             后台文件编辑与外观面板
 │  └─ favicon.svg             蓝色 A 字标

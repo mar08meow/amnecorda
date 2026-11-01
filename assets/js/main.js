@@ -1,4 +1,4 @@
-/* AMNE CORDA — motion & interface details */
+/* AMNE CORDA — personal homepage interactions */
 (() => {
   "use strict";
 
@@ -27,30 +27,6 @@
     };
     tick();
     window.setInterval(tick, 30000);
-  }
-
-  /* Header state ----------------------------------------------------------- */
-  const header = document.querySelector(".site-header");
-  if (header) {
-    const updateHeader = () => {
-      header.classList.toggle("is-scrolled", window.scrollY > 12);
-    };
-    updateHeader();
-    window.addEventListener("scroll", updateHeader, { passive: true });
-  }
-
-  /* Scroll progress -------------------------------------------------------- */
-  const progress = document.querySelector("[data-progress]");
-  if (progress) {
-    const updateProgress = () => {
-      const max = root.scrollHeight - root.clientHeight;
-      const ratio = max > 0 ? root.scrollTop / max : 0;
-      progress.style.transform =
-        "scaleX(" + Math.min(1, Math.max(0, ratio)) + ")";
-    };
-    updateProgress();
-    window.addEventListener("scroll", updateProgress, { passive: true });
-    window.addEventListener("resize", updateProgress);
   }
 
   /* Mobile menu ------------------------------------------------------------ */
@@ -83,13 +59,10 @@
   });
 
   /* Scroll reveal ---------------------------------------------------------- */
-  const revealSelector =
-    ".reveal, .project-item, .about-copy, .about-visual, .contact-panel, .section-head";
-  const revealItems = Array.from(document.querySelectorAll(revealSelector));
-
-  revealItems.forEach((item) => {
-    if (!item.classList.contains("reveal")) item.classList.add("reveal");
-  });
+  const revealItems = Array.from(
+    document.querySelectorAll(".block, .content-footer")
+  );
+  revealItems.forEach((item) => item.classList.add("reveal"));
 
   if ("IntersectionObserver" in window && !reduceMotion) {
     const observer = new IntersectionObserver(
@@ -101,15 +74,15 @@
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -5% 0px" }
     );
     revealItems.forEach((item) => observer.observe(item));
   } else {
     revealItems.forEach((item) => item.classList.add("is-in"));
   }
 
-  /* Active nav link -------------------------------------------------------- */
-  const navLinks = Array.from(document.querySelectorAll(".nav-links a"));
+  /* Sidebar active link ---------------------------------------------------- */
+  const navLinks = Array.from(document.querySelectorAll(".side-nav a"));
   const sectionIds = ["home", "projects", "about", "contact"];
   const sections = sectionIds
     .map((id) => document.getElementById(id))
@@ -129,35 +102,10 @@
           linkFor(entry.target.id)?.classList.add("is-active");
         });
       },
-      { rootMargin: "-42% 0px -52% 0px", threshold: 0 }
+      { rootMargin: "-38% 0px -54% 0px", threshold: 0 }
     );
 
     sections.forEach((section) => navObserver.observe(section));
-  }
-
-  /* Hero product window tilt ---------------------------------------------- */
-  const hero = document.querySelector(".hero");
-  const visual = document.querySelector("[data-tilt]");
-  const windowWrap = visual?.querySelector(".app-window-wrap");
-
-  if (
-    hero &&
-    windowWrap &&
-    window.matchMedia("(pointer: fine)").matches &&
-    !reduceMotion
-  ) {
-    hero.addEventListener("pointermove", (event) => {
-      const rect = hero.getBoundingClientRect();
-      const x = (event.clientX - rect.left) / rect.width - 0.5;
-      const y = (event.clientY - rect.top) / rect.height - 0.5;
-      windowWrap.style.setProperty("--ry", (x * 7).toFixed(2) + "deg");
-      windowWrap.style.setProperty("--rx", (-y * 7).toFixed(2) + "deg");
-    });
-
-    hero.addEventListener("pointerleave", () => {
-      windowWrap.style.removeProperty("--ry");
-      windowWrap.style.removeProperty("--rx");
-    });
   }
 
   /* Copy email ------------------------------------------------------------- */
