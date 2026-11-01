@@ -374,7 +374,7 @@
 
   /* --- Content editor ----------------------------------------------------- */
 
-  const CONTENT_PAGE = "mar08meow/index.html";
+  const CONTENT_PAGE = "index.html";
 
   const getFieldValue = (id) => {
     const field = $("#" + id);
@@ -701,16 +701,6 @@
       doc.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
         link.setAttribute("href", `mailto:${email}`);
       });
-    }
-
-    const projects = collectProjects();
-    if (projects.some((project) => !project.title)) {
-      setStatus(status, "项目名称不能为空。", "error");
-      return;
-    }
-    const projectList = doc.querySelector("#projects .project-list");
-    if (projectList) {
-      projectList.innerHTML = projects.map(buildProjectCard).join("\n");
     }
 
     button.disabled = true;
