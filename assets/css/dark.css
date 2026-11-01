@@ -2,7 +2,6 @@
   :root {
     --paper: #08111f;
     --paper-2: #0d192b;
-    --paper-3: #12233d;
     --ink: #e8f0ff;
     --ink-2: #cbd8f0;
     --ink-soft: #a7b8d6;
@@ -19,12 +18,7 @@
     color: var(--ink);
   }
 
-  .sidebar,
-  .mobile-header {
-    background: var(--paper);
-  }
-
-  .mobile-header {
+  .site-header {
     background: color-mix(in srgb, var(--paper) 88%, transparent);
   }
 
@@ -42,37 +36,6 @@
 
   .button--ghost:hover {
     color: var(--accent-deep);
-  }
-
-  .mobile-menu {
-    background: #050b14;
-    color: var(--ink);
-  }
-
-  .mobile-menu .brand,
-  .mobile-nav a,
-  .mobile-menu-foot a {
-    color: var(--ink);
-  }
-
-  .mobile-menu-foot {
-    color: rgba(232, 240, 255, 0.5);
-  }
-
-  .menu-close {
-    border-color: var(--line);
-  }
-
-  .menu-close span {
-    background: var(--ink);
-  }
-
-  .nav-toggle span {
-    background: var(--ink);
-  }
-
-  .mobile-header {
-    border-bottom-color: var(--line);
   }
 
   .skip-link {

@@ -1,6 +1,6 @@
 # AMNE CORDA — 个人主页
 
-蓝白个人主页：左侧固定导航、安静的排版、自我介绍和真实项目列表。不是产品落地页，也不是博客。
+极简个人主页：顶部导航、窄内容栏、白底蓝字，只保留自我介绍、真实项目和联系方式。
 
 - 线上：`https://amnecorda.com`
 - 本地：`D:\AI\workspace\personal-blog`
@@ -8,12 +8,11 @@
 
 ## 页面
 
-- **`index.html`**：左侧导航个人主页
+- **`index.html`**：极简个人主页
   - Hero：`Hello, I'm AmneCorda.`
-  - I am：三句简短自述
-  - Things I made：AppPantry、HyperOS Workbench Blur Fix
-  - About me：一个普通人的简短自述
-  - Find me at：GitHub、X、Email
+  - Projects：AppPantry、HyperOS Workbench Blur Fix
+  - About：一个普通人的简短自述
+  - Contact：GitHub、X、Email
 - **`404.html`**：精简错误页
 - **`admin/index.html`**：受 Cloudflare Access 保护的后台，包含「站点文件」「内容」「外观」
 
@@ -28,11 +27,10 @@ personal-blog/
 │  ├─ _lib/                   Access JWT、GitHub App token、GitHub API
 │  └─ admin/api/              me / file / commit API
 ├─ assets/
-│  ├─ css/main.css            个人主页布局、侧栏、项目列表与响应式
+│  ├─ css/main.css            极简布局、项目列表与响应式
 │  ├─ css/theme.css           蓝白主题变量（后台可覆盖）
 │  ├─ css/dark.css            夜间模式（跟随系统）
 │  ├─ css/admin.css           后台样式
-│  ├─ js/main.js              侧栏导航、移动菜单、时钟、滚动淡入
 │  ├─ js/releases.js          AppPantry / HyperOS 最新 Release 下载按钮
 │  ├─ js/admin.js             后台文件编辑与外观面板
 │  └─ favicon.svg             蓝色 A 字标
