@@ -1,93 +1,124 @@
-/* AMNE CORDA — automatic night mode.
-   Follows the device/browser prefers-color-scheme setting.
-   Loaded after theme.css; only overrides colors, not fonts or sizes. */
-
-html {
-  color-scheme: light;
-}
-
 @media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-
   :root {
     --paper: #08111f;
-    --paper-2: #0e1a2e;
-    --paper-3: #14233d;
+    --paper-2: #0d192b;
+    --paper-3: #12233d;
     --ink: #e8f0ff;
     --ink-2: #cbd8f0;
     --ink-soft: #a7b8d6;
     --muted: #7c8ca8;
-    --line: rgba(168, 199, 255, 0.2);
-    --line-soft: rgba(168, 199, 255, 0.1);
-    --accent: #a8c7ff;
+    --line: rgba(147, 197, 253, 0.18);
+    --line-soft: rgba(147, 197, 253, 0.09);
+    --accent: #93c5fd;
     --accent-deep: #dbeafe;
-    --accent-soft: #7aa7f5;
+    --accent-soft: #60a5fa;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
   }
 
   .site-header {
-    background: var(--paper);
+    background: color-mix(in srgb, var(--paper) 84%, transparent);
+  }
+
+  .hero-glow {
+    opacity: 0.7;
+  }
+
+  .app-window {
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.38), 0 4px 14px rgba(0, 0, 0, 0.2);
+  }
+
+  .app-icon {
+    color: #ffffff;
+  }
+
+  .app-icon--soft {
+    color: #08111f;
+  }
+
+  .button {
+    color: #08111f;
+  }
+
+  .button:hover {
+    color: #08111f;
+  }
+
+  .button--ghost {
+    color: var(--ink);
+  }
+
+  .button--ghost:hover {
+    color: var(--accent-deep);
+  }
+
+  .about-visual {
+    background: radial-gradient(circle at 28% 24%, #14233d, #0d192b 52%, #08111f);
+  }
+
+  .contact-panel {
+    background: linear-gradient(135deg, #071226 0%, #0e2550 58%, #173a7a 100%);
+  }
+
+  .contact-button {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: #1e3a8a;
+  }
+
+  .contact-button:hover {
+    background: transparent;
+    color: #ffffff;
   }
 
   .mobile-menu {
-    background: #080808;
+    background: #050b14;
     color: var(--ink);
   }
 
   .mobile-menu .brand,
-  .mobile-nav a,
+  .mobile-nav a {
+    color: var(--ink);
+  }
+
+  .mobile-menu-foot {
+    color: rgba(232, 240, 255, 0.5);
+  }
+
   .mobile-menu-foot a {
     color: var(--ink);
   }
 
-  .mobile-menu-top,
-  .mobile-menu-foot {
-    border-color: var(--line);
+  .nav-toggle {
+    background: var(--paper);
   }
 
-  .mobile-nav a {
-    border-bottom-color: var(--line);
-  }
-
-  .mobile-menu-foot {
-    color: var(--muted);
-  }
-
+  .nav-toggle span,
   .menu-close span {
     background: var(--ink);
   }
 
-  .statement {
-    background: #171717;
-    color: var(--ink);
+  .menu-close {
+    border-color: var(--line);
   }
 
-  .statement::before {
-    color: rgba(241, 241, 241, 0.04);
+  .project-tags li,
+  .project-year,
+  .float-chip {
+    background: color-mix(in srgb, var(--paper) 86%, transparent);
   }
 
-  .statement-kicker,
-  .statement-by {
-    color: var(--muted);
+  .app-sidebar,
+  .app-search,
+  .app-toast,
+  .app-bar {
+    background: var(--paper-2);
   }
 
-  .statement-en {
-    color: var(--ink-soft);
-  }
-
-  .statement-foot {
-    border-top-color: var(--line);
-  }
-
-  .prose pre {
-    background: #080808;
-    color: #e9e2d3;
-  }
-}
-
-@media (prefers-color-scheme: dark) and (max-width: 880px) {
-  .site-header {
-    background: rgba(13, 13, 13, 0.94);
+  .app-tile {
+    background: var(--paper);
   }
 }
