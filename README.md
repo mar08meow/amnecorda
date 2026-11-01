@@ -1,38 +1,38 @@
 # AMNE CORDA — 个人主页
 
-根路径为占位页，个人介绍位于 `/mar08meow/`。整站只保留几句自我介绍和联系方式。
+蓝白极简的单页个人介绍：白色纸面、深蓝文字、蓝色强调，名字用蓝色。没有博客、文章归档或虚构履历，只介绍我自己和做过的小工具。
 
-- 线上：`https://amnecorda.com`（占位页）
-- 个人主页：`https://amnecorda.com/mar08meow/`
+- 线上：`https://amnecorda.com`
 - 本地：`D:\AI\workspace\personal-blog`
 - GitHub：`https://github.com/mar08meow/amnecorda`
 
 ## 页面
 
-- **`index.html`**：根路径占位页
-- **`mar08meow/index.html`**：极简个人主页
-  - Hero：`Hello, I'm AmneCorda.`
-  - 四句话介绍：我是谁、平时做什么、会什么、做东西的习惯
-  - Contact：GitHub、X、Email
+- **`index.html`**：单页个人介绍
+  - Hero：`你好，我是 AmneCorda。`
+  - About me：一个普通人的简短自述
+  - Things I made：AppPantry、HyperOS Workbench Blur Fix
+  - Find me at：GitHub、X、Email
 - **`404.html`**：精简错误页
-- **`admin/index.html`**：受 Cloudflare Access 保护的后台，包含「站点文件」「内容」「外观」
+- **`admin/index.html`**：受 Cloudflare Access 保护的后台，只保留「站点文件」与「外观」
 
 ## 文件结构
 
 ```
 personal-blog/
-├─ index.html                 根路径占位页
-├─ mar08meow/index.html       极简个人主页
+├─ index.html                 单页个人介绍
 ├─ 404.html                   404 页面
 ├─ admin/index.html           管理后台
 ├─ functions/
 │  ├─ _lib/                   Access JWT、GitHub App token、GitHub API
 │  └─ admin/api/              me / file / commit API
 ├─ assets/
-│  ├─ css/main.css            极简布局与响应式
+│  ├─ css/main.css            布局、组件与默认样式
 │  ├─ css/theme.css           蓝白主题变量（后台可覆盖）
 │  ├─ css/dark.css            夜间模式（跟随系统）
 │  ├─ css/admin.css           后台样式
+│  ├─ js/main.js              菜单、时钟、滚动淡入、复制邮箱
+│  ├─ js/releases.js          AppPantry 最新 Release 下载按钮
 │  ├─ js/admin.js             后台文件编辑与外观面板
 │  └─ favicon.svg             蓝色 A 字标
 ├─ robots.txt
@@ -51,23 +51,22 @@ GitHub 仓库 `mar08meow/amnecorda` 已连接 Cloudflare Pages，`main` 分支�
 
 后台登录使用 Cloudflare Access，只允许 `wen18792247083@gmail.com`。GitHub 私钥保存在 Cloudflare Pages 的加密环境变量里，浏览器不接触 Token。
 
-## 后台内容编辑
-
-登录 `/admin/` 后打开 **内容**，可以直接修改：
-
-- 页面标题、SEO 描述
-- 首页名字、一句话介绍、介绍段落
-- About 两段文字
-- 联系区文字、GitHub / X / Email 链接
-
-保存后会重写 `mar08meow/index.html`、创建 GitHub commit，并自动触发 Cloudflare 部署。根路径占位页用「站点文件」编辑，更复杂的结构也使用「站点文件」。
-
 ## 外观
 
-- 蓝白主题默认值在 `assets/css/theme.css`：`--paper: #ffffff`、`--ink: #0b1220`、`--accent: #6b86f0`
+- 蓝白主题默认值在 `assets/css/theme.css`：`--paper: #ffffff`、`--ink: #0b1220`、`--accent: #1d4ed8`
 - 名字颜色来自 `.hero-title em { color: var(--accent); }`
 - 夜间模式在 `assets/css/dark.css`，跟随手机/系统的 `prefers-color-scheme`
 - 后台「外观」可以调整颜色、字体、字号、字重和预设；保存后写入 `theme.css` 并触发部署
+
+## AppPantry 下载按钮
+
+`assets/js/releases.js` 会读取：
+
+```
+https://api.github.com/repos/mar08meow/AppPantry/releases/latest
+```
+
+自动把「下载便携版 / 下载安装版」指向最新 Release 中包含 `portable.exe` 和 `setup.exe` 的文件，并更新版本号与 Release notes 链接。接口失败时保留 v1.0.0 静态链接作为回退。
 
 ## 部署
 
