@@ -4,17 +4,11 @@ const BRANCH = "main";
 
 const EXACT_PATHS = new Set([
   "index.html",
-  "mar08meow/index.html",
   "404.html",
-  "about.html",
-  "projects.html",
-  "writing.html",
   "assets/css/main.css",
   "assets/css/theme.css",
   "assets/css/dark.css",
-  "data/posts.json",
   "sitemap.xml",
-  "feed.xml",
   "robots.txt",
   "_headers",
 ]);
