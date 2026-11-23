@@ -29,7 +29,7 @@
     window.setInterval(tick, 30000);
   }
 
-  /* Sticky header state ---------------------------------------------------- */
+  /* Sticky header state --------------------------------------------------- */
   const header = document.querySelector(".site-header");
   if (header) {
     const onScroll = () => {
@@ -39,7 +39,7 @@
     window.addEventListener("scroll", onScroll, { passive: true });
   }
 
-  /* Mobile menu ------------------------------------------------------------ */
+  /* Mobile menu ----------------------------------------------------------- */
   const toggle = document.querySelector(".nav-toggle");
   const menu = document.querySelector(".mobile-menu");
   const closeBtn = document.querySelector(".menu-close");
@@ -68,9 +68,9 @@
     }
   });
 
-  /* Reveal on scroll ------------------------------------------------------- */
+  /* Reveal on scroll ------------------------------------------------------ */
   const revealItems = document.querySelectorAll(".reveal");
-  if ("IntersectionObserver" in window) {
+  if ("IntersectionObserver" in window && revealItems.length) {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -87,7 +87,58 @@
     revealItems.forEach((el) => el.classList.add("is-in"));
   }
 
-  /* Copy email ------------------------------------------------------------- */
+  /* Project platform filter ----------------------------------------------- */
+  const filterButtons = document.querySelectorAll("[data-filter]");
+  const projectCards = document.querySelectorAll("[data-platform]");
+  if (filterButtons.length && projectCards.length) {
+    filterButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.filter || "all";
+        filterButtons.forEach((item) => {
+          const active = item === btn;
+          item.classList.toggle("is-active", active);
+          item.setAttribute("aria-pressed", String(active));
+        });
+        projectCards.forEach((card) => {
+          const match = target === "all" || card.dataset.platform === target;
+          card.hidden = !match;
+        });
+      });
+    });
+  }
+
+  /* Active nav pill on hash/scroll ---------------------------------------- */
+  const navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+  if (navLinks.length && "IntersectionObserver" in window) {
+    const sections = navLinks
+      .map((link) => document.querySelector(link.getAttribute("href")))
+      .filter(Boolean);
+
+    const setActive = (id) => {
+      navLinks.forEach((link) => {
+        const isCurrent = link.getAttribute("href") === `#${id}`;
+        if (isCurrent) {
+          link.setAttribute("aria-current", "page");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    };
+
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.target.id) {
+            setActive(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-35% 0px -55% 0px" }
+    );
+    sections.forEach((sec) => sectionObserver.observe(sec));
+  }
+
+  /* Copy to clipboard (email & homepage link) ----------------------------- */
   document.querySelectorAll("[data-copy]").forEach((button) => {
     button.addEventListener("click", async () => {
       const value = button.dataset.copy;
@@ -107,13 +158,16 @@
         field.remove();
       }
 
-      if (!button.dataset.label) {
-        button.dataset.label = button.textContent;
+      const labelTarget = button.querySelector("[data-copy-label]") || button;
+      if (!labelTarget.dataset.originalLabel) {
+        labelTarget.dataset.originalLabel = labelTarget.textContent;
       }
-      const original = button.dataset.label;
-      button.textContent = "已复制 ✓";
+      const original = labelTarget.dataset.originalLabel;
+      button.classList.add("is-copied");
+      labelTarget.textContent = "已复制 ✓";
       window.setTimeout(() => {
-        button.textContent = original;
+        button.classList.remove("is-copied");
+        labelTarget.textContent = original;
       }, 1800);
     });
   });
