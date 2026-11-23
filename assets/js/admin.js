@@ -1126,7 +1126,7 @@ ${items}
           <p class="footer-label">Elsewhere</p>
           <nav class="footer-nav" aria-label="社交链接">
             <a href="https://github.com/mar08meow" target="_blank" rel="noopener noreferrer">GitHub <span class="arrow" aria-hidden="true">↗</span></a>
-            <a href="https://x.com/Amnecorda" target="_blank" rel="noopener noreferrer">X / Twitter <span class="arrow" aria-hidden="true">↗</span></a>
+            <a href="https://x.com/i/user/659501490174820352" target="_blank" rel="noopener noreferrer">X / Twitter <span class="arrow" aria-hidden="true">↗</span></a>
             <a href="mailto:hello@amnecorda.com">Email <span class="arrow" aria-hidden="true">↗</span></a>
           </nav>
         </div>
